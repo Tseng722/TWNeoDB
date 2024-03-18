@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+{% block title %} pep_detail {% endblock %}
+
+
+{% block content %}
+
+<div class="col-md-12" style="padding-top: 100px;"></div>
+<div class="container-sm" style=" text-align: center">
+  <div class="text-left" >
+    <button onclick="goBack()" id="inputbut">Back</button>
+  </div>
+  <div class = "row">
+    <div class="col-md-2 text-right offset-3" >
+      <h4>
+        <p id = "tumorSequence" >{{tumor}}</p>
+        <p id = "normalSequence" style="display: none;">{{normal}}</p>
+        <p id = "pos" style="display: none;">{{pos}}</p>
+      </h4>  
+    </div>
+    <div class=" col-md-2 text-left"  >
+        <h4>{{hla}}</h4>
+    </div> 
+    <div class=" col-md-4 text-left"  >
+      <h5>Source from : <span class="badge bg-dark">DNA</span></h5>
+      <h5>
+        Tumor type : 
+        {% for i in tumor_object %}
+          {% if i.tumor_type == 'colon' %}
+            <span class="badge bg-primary">{{i.tumor_type}}</span>
+          
+          {% elif i.tumor_type == 'oral' %}
+            <span class="badge bg-success">{{i.tumor_type}}</span>
+          {% endif %}
+        {% endfor %}
+      </h5>
+      <h5>
+        Associated Transcript :
+        {% if associated_transcript_object %}
+          <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#associated_transcriptModal">
+            show
+          </button>
+        {% else %}
+          <span >None</span>
+        {% endif %}
+      </h5>
+    </div>
+  </div>
+</div>
+<div class="col-md-12" style="padding-top: 20px;"></div>
+<div class="container-sm" style=" text-align: center" >
+    <div class="card shadow">
+        <div class="card-header bg-secondary text-white">
+          <h5><strong>Gene Information</strong></h5>
+        </div>
+        
+        <div class="card-body">
+          <table class="table text-center table-borderless">
+            
+              <tr>
+                <th>Gene symbol</th><td>{{ transcript_object.gene_symbol }}</td>
+              </tr>
+              <tr>
+                <th>Gene ID</th><td>{{ transcript_object.gene_id }}</td>
+              </tr>
+              <tr>
+                <th>Transcript ID</th><td>{{ transcript_object.transcript_id }}</td>
+              </tr>
+              <tr>
+                <th>Variant position</th><td>{{ transcript_object.chromosome }}:{{ transcript_object.start }}-{{ transcript_object.stop }}</td>
+              </tr>
+              <tr>
+                <th>Reference</th><td>{{ transcript_object.reference }}</td>
+              </tr>
+              <tr> 
+                <th>Variant</th><td>{{ transcript_object.variant }}</td>
+              </tr>
+              <tr>
+                <th>Amino acids change</th><td>{{ transcript_object.mutation }}</td>
+              </tr>
+              <tr>
+                <th>Protein position</th><td>{{ transcript_object.protein_position }}</td>
+              </tr>
+              <tr>
+                <th>Variant Frequency</th><td>{{ transcript_object.variant_frequency }}</td>    
+              </tr>
+              <tr>
+                <th>Associated transcript peptide</th> 
+                  {% if associated_pep_object %}
+                    <td>
+                      <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#associated_peptideModal">
+                        show
+                      </button>
+                    </td>
+                  {% else %}
+                    <td>None</td>
+                  {% endif %}
+                
+              </tr>
+              <tr>
+                <th>Fold Change</th><td>{{ score_groupby.0.fold_change_avg }}</td>
+              </tr>
+              <tr>
+                <th>Tumor Dna Depth</th><td>{{ score_groupby.0.tumor_dna_depth_avg }}</td>
+              </tr>
+              <tr>
+                <th>Tumor Dna Vaf</th><td>{{ score_groupby.0.tumor_dna_vaf_avg }}</td>
+              </tr>
+              <tr>
+                <th>Tpm Normal</th><td>{{ score_groupby.0.tpm_n_avg }}</td>
+              </tr>
+              <tr>
+                <th>Tpm Tumor</th><td>{{ score_groupby.0.tpm_t_avg }}</td>
+              </tr>
+              
+            
+          </table>
+        </div>
+    </div>
+</div>
+<div class="col-md-12" style="padding-top: 20px;"></div>
+<div class="container-sm" style=" text-align: center" >
+  <div class="card shadow">
+    <div class="card-header bg-secondary text-white">
+        <h5><strong>Prioritizing Score</strong></h5>
+    </div>
+    <div class="card-body">
+      <table class="table text-center table-borderless">
+          <tr>
+            <th>IC 50</th><td>{{ mutant_peptide_object.ic50_mut }}</td>
+          </tr>
+          <tr>
+            <th>MT Rank</th><td>{{ mutant_peptide_object.percent_mut }}</td>
+          </tr>
+          <tr>
+            <th>Best Cleavage Position</th><td>{{ mutant_peptide_object.peptide_selection_score_id.best_cleavage_position }}</td>
+          </tr>
+          <tr>
+            <th>Best Cleavage Score</th><td>{{ mutant_peptide_object.peptide_selection_score_id.best_cleavage_score }}</td> 
+          </tr>
+          <tr>
+            <th>Binding Stability</th><td>{{ mutant_peptide_object.peptide_selection_score_id.predicted_stability }}</td>
+          </tr>
+          <tr>
+            <th>Half Life</th><td>{{ mutant_peptide_object.peptide_selection_score_id.half_life }}</td>
+          </tr>
+          <tr>
+            <th>Stability Rank</th><td>{{ mutant_peptide_object.peptide_selection_score_id.stability_rank }}</td>
+          </tr>
+          <tr>
+            <th>Average Gravy Score</th><td>{{ mutant_peptide_object.peptide_selection_score_id.cterm_7mer_gravy_score }}</td>
+          </tr>
+          <tr>
+            <th>Max Gravy Score</th><td>{{ mutant_peptide_object.peptide_selection_score_id.max_7mer_gravy_score }}</td>
+          </tr>
+          <tr>
+            <th>Average Hydrophobicity score</th><td>{{ mutant_peptide_object.peptide_selection_score_id.hydro_avg_score }}</td>
+          </tr>
+          <tr>
+            <th>Dissimilarity</th><td>{{ mutant_peptide_object.peptide_selection_score_id.dissimilarity }}</td>
+          </tr>
+          <tr>
+            <th>Foreignness</th><td>{{ mutant_peptide_object.peptide_selection_score_id.foreignness_score }}</td>
+          </tr>
+          <tr>
+            <th>Foreignness IEDB_anno</th><td>{{ mutant_peptide_object.peptide_selection_score_id.IEDB_anno }}</td>
+          </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12" style="padding-top: 20px;"></div>
+<div class="container-sm" style=" text-align: center" >
+  <div class="card shadow">
+      <div class="card-header bg-secondary text-white">
+          <h5><strong>Validated Information </strong></h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-6">
+            <h5><strong>Peptide present by MHC</strong></h5>
+            <table class="table text-center  table-borderless">
+              {% if dict_obj %}
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>HLA type</th>
+                    <th>Qualitative measure</th>
+                    <th>IEDB assay</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for i in dict_obj %} 
+                        <tr>
+                          <th></th>
+                          <td>{{ i.mhc_allele_name }}</td>
+                          <td>{{ i.qualitative_measure }}</td>
+                          <td><a href ="https://www.iedb.org/assay/{{i.elution_id}}" target="_blank">link</a></td>
+                          <!-- +{{ i.elution_id }} -->
+                        </tr>
+                        
+                    {% endfor %}
+              {% else %}
+                    <tr>
+                        <td colspan="4"><strong>None</strong></td>
+                    </tr>
+              {% endif %}
+              </tbody>
+            </table>
+          </div>
+          <div class="col-6">
+            <h5><strong>Validated immunogenicity</strong></h5>
+            <table class="table text-center  table-borderless">
+              {% if validated_peptide %}
+                <tr>
+                  <th>Immunogenicity</th>
+                  <th>IEDB</th>
+                  <th>DeepNeo</th>
+                  <th>Prime</th>
+                </tr>
+                <tr>
+                  <td>{% if validated_peptide.tcr == 1 %}Yes{% elif validated_peptide.tcr == 0 %}No{% endif %}</td>
+                  <td>{% if validated_peptide.iedb_tcr == 1 %}Y{% elif validated_peptide.iedb_tcr == 0 %}N{% endif %}</td>
+                  <td>{% if validated_peptide.deepneo == 1 %}Y{% elif validated_peptide.deepneo == 0 %}N{% endif %}</td>
+                  <td>{% if validated_peptide.prime == 1 %}Y{% elif validated_peptide.prime == 0 %}N{% endif %}</td>
+                </tr>
+
+              {% else %}
+                <tr>
+                  <td colspan="4"><strong>None</strong></td>
+                </tr>
+              {% endif %}
+            </table>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+<div class="col-md-12" style="padding-top: 100px;"></div>
+<!-- Modal -->
+{% include 'relational_transcript.html' %}
+{% include 'relational_peptide.html' %}
+
+
+<script>
+
+    var np = document.getElementById("normalSequence").innerText;
+    var tp = document.getElementById("tumorSequence").innerText;
+    const x = parseInt(document.getElementById("pos").innerText, 10)-1;
+    var aa = np[x];
+    var markedTumorSequence = tp.substring(0,x)+"<nobr style='color:red;'>"+tp[x]+"</nobr>"+"<sup style='color:gray;'>"+aa+"</sup>"+ tp.substring(x + 1,);
+    markedTumorSequence = markedTumorSequence 
+    var t = x+1;
+    document.getElementById("tumorSequence").innerHTML = markedTumorSequence;
+    function goBack() {
+            window.history.go(-1);
+        }
+
+</script>
+
+
+
+{% endblock %}

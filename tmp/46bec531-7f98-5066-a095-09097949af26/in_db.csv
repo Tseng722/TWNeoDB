@@ -1,0 +1,3 @@
+Peptide,HLA_Type,Length,th,ic50,mt,best_cleavage_position,best_cleavage_score,predicted_stability,half_life,stability_rank
+ILVHDVPLL,HLA-A*02:01,9,ILVHDVPLL_HLA-A*02:01,17.74,0.165,9.0,0.969785,0.83,3.71,0.9
+FLDLPWVDVL,HLA-A*02:01,10,FLDLPWVDVL_HLA-A*02:01,26.845,0.245,9.0,0.945477,0.449,0.87,5.0

@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+{% block title %} mTSA database {% endblock %}
+{% block content %}  
+    <!-- <style>
+        tr { display: block; float: left; }
+        th, td { display: block; }
+    </style> -->
+    <div class="col-md-12" style="padding-top: 100px;"></div>
+    <div class="container-sm p-3 mb-2  text-dark" style="background: #ededed;border-radius: 0px 49px 0px 0px;padding:10px; text-align: left;" >  
+        <form action="" method='POST' name="search_filter">
+            {% csrf_token %}  
+            <div class = "row">
+                <div class = "col-6">
+                    <label for="Tissue type">Tissue type : </label>
+                    <input type="text" class="input" id="tissue_type" name="tissue_type" value="{{tissue_type}}" >
+                </div>
+                <div class = "col-6">
+                    <label for="Gene symbol">Gene symbol : </label>
+                    <input type="text" class="input" id="gene_symbol" name="gene_symbol" value="{{gene_symbol}}">
+                </div>
+            </div>
+            <div class = "row">
+                
+                <div class = "col-6">
+                    <label for="Mut peptide">Mut peptide : </label>
+                    <input class="input" type="text" name="tumor_protein" value="{{tumor_protein}}">
+
+                </div>
+                <div class = "col-6">
+                    <label for="HLA type">HLA type   :  </label>
+                    <input type="text" class="input" id="hla_type" name="hla_type" value="{{hla_type}}">
+                </div>
+                
+            </div>
+            <input type="submit"  id="inputbut" value="Submit" />
+            
+            <button type="submit" id="inputbut"formaction="{% url 'download_user_filter_peptides' %}">Download</button>
+        </form>
+        
+    </div>
+    <div class="container-fluid bg-3 text-center">
+        <h3>mTSA-RNA</h3>
+    </div>
+    <div class="container-sm p-3 mb-2 text-dark text-center" style="background: #f4f4f4;padding: 10px;">
+        <table id="table" class="table table-borderless "data-sort-class="table-active"data-click-to-select="true"data-filter-control="true">
+            <thead >
+                <tr >
+                    <th data-field="state" data-checkbox="true" ></th>
+                    <th data-sortable="true" >ID</th>
+                    <th data-sortable="true"  data-formatter="layout1" >Mut peptide </th>
+                    <th data-sortable="true">Tissue type</th>
+                    <th data-sortable="true">Gene symbol</th>
+                    <th data-sortable="true">Varient frequency</th>
+                    <th data-sortable="true">HLA type</th>
+                    <th data-sortable="true">IC50</th>
+                    <th data-sortable="true">Mut rank</th>
+                </tr>
+            </thead>
+            {% for i in page_object_rna %}
+                        
+                <tr class='clickable-row' data-href='url:/#' id="table_border_color" >
+                        
+                    <td ></td>
+                    <td ><a  href='{% url "detail_page_mtsa" i.id %}'>{{ forloop.counter }}</a></td>
+                    <td >{{i.mutant_peptide_id.tumor_protein}}<br>{{i.mutant_peptide_id.normal_protein}}</td>
+                    <td >{{i.tumor_type}}</td>
+                    <td >{{i.mtsa_rna_transcript_id.gene_symbol}}</td>
+                    <td >{{i.mtsa_rna_transcript_id.variant_frequency}}</td>
+                    <td >{{i.mutant_peptide_id.hla_type}}</td>
+                    <td >{{i.mutant_peptide_id.ic50_mut}}</td>
+                    <td >{{i.mutant_peptide_id.percent_mut}}</td>
+                        
+                </tr>
+                        
+            {% endfor %}
+        </table>
+        <form action='database_mTSA' method='GET' ></form>
+            <nav aria-label="Page navigation rna">
+                <ul class="pagination" id="pager">
+                    {#上一页按钮开始#}
+                    {# 如果当前页有上一页#}
+                    {% if page_object_rna.has_previous %}
+                        {#  当前页的上一页按钮正常使用#}
+                        <li class="previous"><a class="page-link" href="/database/mTSA?page_rna=1"><span aria-hidden="true">&laquo;</span></a></li>
+                        <li class="previous"><a class="page-link" href="/database/mTSA?page_rna={{ page_object_rna.previous_page_number }}"><span aria-hidden="true">&lsaquo;</span></a></li>
+                    {% else %}
+                        {# 当前页的不存在上一页时,上一页的按钮不可用#}
+                        <li class="previous disabled"><a class="page-link" href="/database/mTSA?page_rna=1"><span aria-hidden="true">&laquo;</span></a></li>
+                    
+                        <li class="previous disabled"><a class="page-link" href="#"><span aria-hidden="true">&lsaquo;</span></a></li>
+                        
+                    {% endif %}
+                    {#上一页按钮结束#}
+                    {% if  page_num_rna > 5 %}
+                        <li class="page-item"><a class="page-link"href="#">...</a></li>
+                    {% endif %}
+                    {# 页码开始#}
+                    {% for num_rna in pa_rna.page_range %}
+            
+                        {% if num_rna == page_num_rna %}
+                            <li class="page-item"><a class="page-link active" href="/database/mTSA?page_rna={{ num_rna }}">{{ num_rna }}</a></li>
+                        {% elif num_rna < page_num_rna %}
+                            {% if num_rna|add:"4" > page_num_rna %}
+                                <li class="page-item"><a class="page-link" href="/database/mTSA?page_rna={{ num_rna }}">{{ num_rna }}</a></li>
+                            {% endif %}
+                        {% elif num_rna > page_num_rna %}
+                            {% if page_num_rna|add:"4" > num_rna %}
+                                <li class="page-item"><a class="page-link" href="/database/mTSA?page_rna={{ num_rna }}">{{ num_rna }}</a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {#页码结束#}
+                    {% if  page_num_rna|add:"4" < pa_rna.num_pages %}
+                        <li class="page-item"><a class="page-link"href="#">...</a></li>
+                    {% endif %}
+                    {# 下一页按钮开始#}
+                    {% if page_object_rna.has_next %}
+                        <li class="next"><a class="page-link" href="/database/mTSA?page_rna={{ page_object_rna.next_page_number }}"><span aria-hidden="true">&rsaquo;</span></a></li>
+                        <li class="next"><a class="page-link" href="/database/mTSA?page_rna={{pa_rna.num_pages}}"><span aria-hidden="true">&raquo;</span></a></li>
+                    
+                    {% else %}
+                        <li class="next disabled"><a class="page-link" href="#"><span aria-hidden="true">&rsaquo;</span></a></li>
+                        <li class="next disabled"><a class="page-link" href="/database/mTSA?page_rna={{pa_rna.num_pages}}"><span aria-hidden="true">&raquo;</span></a></li>
+                    
+                    {% endif %}
+                    {# 下一页按钮结束#}
+                    
+                </ul>
+            </nav>
+        </form>
+    </div>
+    <div class="container-fluid bg-3 text-center">
+        <h3>mTSA-DNA</h3>
+    </div>
+    <div class="container-sm p-3 mb-2 text-dark text-center" style="background: #f4f4f4;padding: 10px;">
+        <table id="table_dna" class="table table-borderless "  data-sort-class="table-active"data-click-to-select="true"data-filter-control="true"style="border:none;">
+            <thead >
+                <tr style="border:none;">
+                    <th data-field="state" data-checkbox="true" ></th>
+                    <th data-sortable="true" >ID</th>
+                    <th data-sortable="true"  data-formatter="layout1" >Mut peptide </th>
+                    <th data-sortable="true">Tissue type</th>
+                    <th data-sortable="true">Gene symbol</th>
+                    <th data-sortable="true">Varient frequency</th>
+                    <th data-sortable="true">HLA type</th>
+                    <th data-sortable="true">IC50</th>
+                    <th data-sortable="true">Mut rank</th>
+                </tr>
+            </thead>
+            {% for i in page_object_dna %}
+                            
+                <tr class='clickable-row' data-href='url:/#' id="table_border_color">
+                    <td ></td>
+                    <td ><a  href='{% url "detail_page_mtsa_dna" i.id %}'>{{ forloop.counter }}</a></td>
+                    <td >{{i.mutant_peptide_id.tumor_protein}}<br>{{i.mutant_peptide_id.normal_protein}}</td>
+                    <td >{{i.tumor_type}}</td>
+                    <td >{{i.mtsa_dna_transcript_id.gene_symbol}}</td>
+                    <td >{{i.mtsa_dna_transcript_id.variant_frequency}}</td>
+                    <td >{{i.mutant_peptide_id.hla_type}}</td>
+                    <td >{{i.mutant_peptide_id.ic50_mut}}</td>
+                    <td >{{i.mutant_peptide_id.percent_mut}}</td>  
+                </tr>
+                            
+            {% endfor %}
+        </table>
+        <form action='database_mTSA' method='GET' ></form>
+            <nav aria-label="Page navigation dna">
+                <ul class="pagination" id="pager">
+                    {#上一页按钮开始#}
+                    {# 如果当前页有上一页#}
+                    {% if page_object_dna.has_previous %}
+                        {#  当前页的上一页按钮正常使用#}
+                        <li class="previous"><a class="page-link" href="/database/mTSA?page_dna=1"><span aria-hidden="true">&laquo;</span></a></li>
+                        <li class="previous"><a class="page-link" href="/database/mTSA?page_dna={{ page_object_dna.previous_page_number }}"><span aria-hidden="true">&lsaquo;</span></a></li>
+                    {% else %}
+                        {# 当前页的不存在上一页时,上一页的按钮不可用#}
+                        <li class="previous disabled"><a class="page-link" href="/database/mTSA?page_dna=1"><span aria-hidden="true">&laquo;</span></a></li>
+                    
+                        <li class="previous disabled"><a class="page-link" href="#"><span aria-hidden="true">&lsaquo;</span></a></li>
+                        
+                    {% endif %}
+                    {#上一页按钮结束#}
+                    {% if  page_num_dna > 5 %}
+                        <li class="page-item"><a class="page-link"href="#">...</a></li>
+                    {% endif %}
+                    {# 页码开始#}
+                    {% for num_dna in pa_dna.page_range %}
+            
+                        {% if num_dna == page_num_dna %}
+                            <li class="page-item"><a class="page-link active" href="/database/mTSA?page_dna={{ num_dna }}">{{ num_dna }}</a></li>
+                        {% elif num_dna < page_num_dna %}
+                            {% if num_dna|add:"4" > page_num_dna %}
+                                <li class="page-item"><a class="page-link" href="/database/mTSA?page_dna={{ num_dna }}">{{ num_dna }}</a></li>
+                            {% endif %}
+                        {% elif num_dna > page_num_dna %}
+                            {% if page_num_dna|add:"4" > num_dna %}
+                                <li class="page-item"><a class="page-link" href="/database/mTSA?page_dna={{ num_dna }}">{{ num_dna }}</a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {#页码结束#}
+                    {% if  page_num_dna|add:"4" < pa_dna.num_pages %}
+                        <li class="page-item"><a class="page-link"href="#">...</a></li>
+                    {% endif %}
+                    {# 下一页按钮开始#}
+                    {% if page_object_dna.has_next %}
+                        <li class="next"><a class="page-link" href="/database/mTSA?page_dna={{ page_object_dna.next_page_number }}"><span aria-hidden="true">&rsaquo;</span></a></li>
+                        <li class="next"><a class="page-link" href="/database/mTSA?page_dna={{pa_dna.num_pages}}"><span aria-hidden="true">&raquo;</span></a></li>
+                    
+                    {% else %}
+                        <li class="next disabled"><a class="page-link" href="#"><span aria-hidden="true">&rsaquo;</span></a></li>
+                        <li class="next disabled"><a class="page-link" href="/database/mTSA?page_dna={{pa_dna.num_pages}}"><span aria-hidden="true">&raquo;</span></a></li>
+                    
+                    {% endif %}
+                    {# 下一页按钮结束#}
+                    
+                </ul>
+            </nav>
+        </form>
+    </div>
+
+
+
+
+
+    <script>
+        $(function() {
+            $('#table').bootstrapTable()
+            $('#table_dna').bootstrapTable()
+        })
+        
+
+        function layout1(value, row, index){
+            var x=0,tp2='',tp1='',flag=0,aa='';
+            var idx = value.indexOf("<br>"); 
+            var tp = value.substring(0,idx);
+            var np = value.substring(idx+4,); 
+            // console.log(index) 
+            for (i=0;i<idx;i++){
+                if (tp[i] != np[i]){
+                    x=i;
+                    aa=aa+np[i]
+                }
+                
+            }
+            return tp.substring(0,x)+"<nobr style='color:red;'>"+tp[x]+"</nobr>"+"<sup style='color:gray;'>"+aa+"</sup>"+tp.substring(x+1,);
+        }
+
+    </script>
+
+
+{% endblock %}

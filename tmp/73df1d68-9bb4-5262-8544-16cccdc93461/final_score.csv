@@ -1,0 +1,6 @@
+Peptide,HLA_Type,In TWNeoDB,Length,IC50,Percentile,hydro_score,Predicted Stability,Half Life,Stability Rank,cterm_7mer_gravy_score,max_7mer_gravy_score,Best Cleavage Position,Best Cleavage Score,dissimilarity,foreignness_score,IEDB_anno,IEDB Qualitative
+LYNTVATLY,HLA-A*02:03,X,9,29195.93,55.5,1.49,0.002,0.11,49.0,0.514,0.514,8.0,0.978,0.999935573296226,1.0,127002|gag protein|AAV53342.1|Human immunodeficiency virus 1|11676 LYNTVATLY|126491|gag protein|AAV53216.1|Human immunodeficiency virus 1|11676 LYNTVATLY|190980|gag protein|AAV53216.1|Human immunodeficiency virus 1|11676 LYNTVATLY,Positive : 1 ; Negative : 0
+YSDLHAFYY,HLA-A*01:01,X,9,1.97,0.01,0.239,0.853,4.36,0.01,-0.129,-0.057,8.0,0.973,0.0,,,Positive : 9 ; Negative : 0
+FSDYYDLSY,HLA-A*01:01,X,9,2.12,0.01,-0.895,0.692,1.88,0.1,-1.129,-0.543,5.0,0.969,0.0,0.5,17574|Gag-Pol polyprotein|P05961.3|Human immunodeficiency virus 1|11676 FRDYVDRFY,nan
+GLSSRAVAL,HLA-A*02:01,O,9,306.715,1.9,0.4765898483012726,0.452,0.87,5.0,0.7857142857142857,0.7857142857142857,9.0,0.953573,4.5267995929521e-07,,,nan
+LLAHVHYTV,HLA-A*02:01,O,9,6.71,0.05,0.4440459238798291,0.957,15.77,0.06,0.2571428571428571,0.8428571428571429,9.0,0.966648,0.0,,,nan

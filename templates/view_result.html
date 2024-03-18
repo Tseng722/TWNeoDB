@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %} test {% endblock %}
+{% block content %}   
+    <div class="col-md-12" style="padding-top: 100px;"></div>
+   
+    <div class="container-sm">
+        <h1>Priortizing score</h1>
+        {% if job_status == 'SUCCESS' %}
+            <div class="table-responsive">        
+                <table class="table" style="white-space: nowrap;">
+                    <thead >
+                        <tr class="table-light">
+                            {% for column in df_final.columns %}
+                                <th>{{ column }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in df_final.values %}
+                            <tr>
+                                {% for cell in row %}
+                                    <td>{{ cell }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a class="btn btn-secondary me-md-2 " href="{% url 'download_prioritizing_result' job_uuid %}" role="button">Download</a>
+            </div>
+        {% elif job_status == 'WAITING' %}
+            <p>Yor task for priortizing score prediction was sucessfully submitted to our online system. Please kindly wait for a few times to receive a result.</p>
+            
+        {% elif job_status == 'FAILED' %}
+            <p>Yor task went something wrong. Please upload your file again and check the format.</p>
+        {% endif %}
+    </div>
+{% endblock %}

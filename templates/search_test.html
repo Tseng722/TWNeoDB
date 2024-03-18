@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>test search</title>
+</head>
+
+<body>
+    <h2>mTSA</h2>
+    <!-- <form action="/search/" method="POST" name="form1">
+        {% csrf_token %}
+        <div>piptide: <input type="text" name="username"/>
+        <input type="submit" value="send"></div>
+        <div>result:{{mess}}</div>
+    </form> -->
+    <!-- <form action="/search/" method="POST" name="search_filter">
+        {% csrf_token %}
+        <p>Mut peptide {{postform.PmTumor_protein}}</p>
+
+    </form> -->
+    <form action="/search/" method='POST' name="search_filter">
+        {% csrf_token %}
+        mut：{{ mfilter.form.mTumor_protein }}
+        <!-- type：{{ mfilter.form.mHLA_type }}
+        pos：{{ mfilter.form.mVariant_position }} -->
+        <input type="submit" class="btn btn-primary" value="查詢" />
+    </form>
+    <br />
+    <table class="table">
+        <thead>
+            <th>名稱</th>
+            <!-- <th>類型</th>
+            <th>年份</th> -->
+        </thead>
+        <tbody>
+            {% for i in mfilter.qs %}
+            <tr>
+                <td>{{ i.mTumor_protein }}</td>
+                <!-- <td>{{ i.mHLA_type }}</td>
+                <td>{{ i.mVariant_position }}</td> -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</body>
+
+
+</html>

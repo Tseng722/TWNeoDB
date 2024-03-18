@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} home {% endblock %}
+{% block content %} 
+
+<div class="container-fluid text-center" style="background-image: url('{% static 'img/bg3_v1.png' %}'); background-repeat: no-repeat; background-size: cover; background-position: center; height: 550px; width: 100%;">
+    
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="col-md-5 p-lg-5 mx-auto my-5">
+          <a class="btn btn-lg btn-light" href="#">Learn more</a>
+        </div>
+    </div>
+    
+</div>
+
+
+
+<div class="container-sm">
+    <div class="container-sm text-center" style="margin-top: 100px;">
+        <h1><strong>Data Overview</strong></h1>
+    </div>
+    <div class="container-sm" style="margin-top: 50px;">
+        <div class="row">
+            <div class="col-2 text-center offset-2">
+                <p><img src="{% static 'img/user_v1.png' %}" alt="Image" width='80px' height='auto'></p>
+                <h1><strong>{{total_patient_count}} </strong></h1>
+                <h5>patients</h5>
+            </div>
+            <div class="col-2 text-center offset-1">
+                <p><img src="{% static 'img/tissue_v1.png' %}" alt="Image" width='80px' height='auto'></p>
+                <h1><strong>{{total_tumor_count}} </strong></h1>
+                <h5>Tissue types</h5>
+                
+            </div>
+            <div class="col-2 text-center offset-1">
+                <p><img src="{% static 'img/hla_v1.png' %}" alt="Image" width='80px' height='auto'></p>
+                <h1><strong>{{total_hla_count}}</strong></h1>
+                <h5>HLA genotypes</h5>
+            </div>
+        </div>
+        <div class="row"style="padding-top: 20px;">
+            <div class="col-3 text-center ">
+                <p><img src="{% static 'img/rna_v1.png' %}" alt="Image" width='80px' height='auto'></p>
+                <h1><strong>{{mtsa_rna_count}}</strong></h1>
+                <h5>mTSA from RNA</h5>
+            </div>
+            <div class="col-3 text-center">
+                <p><img src="{% static 'img/dna_v1.png' %}" alt="Image" width='80px' height='auto'></p>
+                <h1><strong>{{mtsa_dna_count}}</strong></h1>
+                <h5>mTSA from DNA</h5>
+            </div>
+            <div class="col-3 text-center">
+                <p><img src="{% static 'img/aetsa_v1.png' %}" alt="Image" width='80px' height='auto'></p>
+                <h1><strong>{{aetsa_count}}</strong></h1>
+                <h5>aeTSA from RNA</h5>
+            </div>
+            <div class="col-3 text-center">
+                <p><img src="{% static 'img/validated_v1.png' %}" alt="Image" width='80px' height='auto'></p>
+                <h1><strong>{{validated_pep_count}}</strong></h1>
+                <h5>validated TCR</h5>
+            </div>
+        </div>
+        
+
+    </div>
+
+</div>
+
+
+
+{% endblock %}

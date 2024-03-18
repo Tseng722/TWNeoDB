@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %} mTSA database {% endblock %}
+{% block head %} 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+{% endblock %}
+{% block content %}   
+    <!-- your_template.html -->
+<div class="container-sm" >
+    <canvas id="myChart" width="400" height="400"></canvas>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+    // 使用 Ajax 请求获取数据
+    $.ajax({
+        url: '/get_data/',  // 后端视图的 URL
+        method: 'GET',
+        success: function(response) {
+            var data = response.data;
+
+            // 随机生成颜色数组（你也可以使用其他方法）
+            var randomColors = generateRandomColors(data.length);
+
+            // 在这里使用数据渲染 Doughnut 图表
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.map(data => data.hla_type),
+                    datasets: [{
+                        data: data.map(data => data.count),
+                        backgroundColor: randomColors,
+                        borderColor: 'rgba(255, 255, 255, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    // 这里可以根据需要配置图表的其他选项
+                    maintainAspectRatio: false,  // 设置为false表示不保持宽高比
+                    responsive: true , // 设置为true表示允许响应式调整大小
+                    
+                    legend: {
+                    display: false  // 设置为false表示不显示图例（标签）
+                },
+                }
+            });
+        },
+        error: function(error) {
+            console.error('Failed to fetch data:', error);
+        }
+    });
+
+    // 随机生成颜色数组的函数
+    function generateRandomColors(count) {
+        var colors = [];
+        for (var i = 0; i < count; i++) {
+            // 生成随机颜色
+            var randomColor = 'rgba(' + getRandomInt(0, 255) + ',' + getRandomInt(0, 255) + ',' + getRandomInt(0, 255) + ',0.8)';
+            colors.push(randomColor);
+        }
+        return colors;
+    }
+
+    // 获取指定范围内的随机整数的函数
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+});
+
+</script>
+
+{% endblock %}

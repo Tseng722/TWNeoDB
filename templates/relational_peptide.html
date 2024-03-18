@@ -1,0 +1,119 @@
+<div class="modal fade" id="associated_peptideModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" style="max-width: 95%;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Associated transcript peptides</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid p-3 mb-2 text-dark text-center" style="background: #f4f4f4;padding: 10px;">
+                <table id="associated_peptideTable" class="table table-borderless "data-sort-class="table-active"data-click-to-select="true"data-filter-control="true">
+                    <thead >
+                        {% if source == 'aeTSA' %}
+                            <tr >
+                                <th data-field="state" data-checkbox="true" ></th>
+                                <th data-sortable="true" >ID</th>
+                                <th data-sortable="true" >Peptide </th>
+                                <th data-sortable="true">Tissue type</th>
+                                <th data-sortable="true">Gene symbol</th>
+                                <th data-sortable="true">cDNA location</th>
+                                <th data-sortable="true">Gene element</th>
+                                <th data-sortable="true">HLA type</th>
+                                <th data-sortable="true">IC50</th>
+                                <th data-sortable="true">Mut rank</th>
+                            </tr>
+                        {% else %}
+                            <tr >
+                                <th data-field="state" data-checkbox="true" ></th>
+                                <th data-sortable="true" >ID</th>
+                                <th data-sortable="true"  data-formatter="layout1" >Mut peptide </th>
+                                <th data-sortable="true" >Ensembl transcript ID</th>
+                                <th data-sortable="true">Tissue type</th>
+                                <th data-sortable="true">Gene symbol</th>
+                                <th data-sortable="true">Varient frequency</th>
+                                <th data-sortable="true">HLA type</th>
+                                <th data-sortable="true">IC50</th>
+                                <th data-sortable="true">Mut rank</th>
+                            </tr>
+                        {% endif %}
+                    </thead>
+                    {% if source == 'RNA' %}
+                        {% for i in associated_pep_object %}
+                            <tr class='clickable-row' data-href='url:/#' id="table_border_color" >
+                                <td ></td>
+                                <td ><a  href='{% url "detail_page_mtsa" i.id %}'>{{ forloop.counter }}</a></td>
+                                <td >{{i.mutant_peptide_id.tumor_protein}}<br>{{i.mutant_peptide_id.normal_protein}}</td>
+                                <td >{{i.mtsa_rna_transcript_id.transcript_id}}</td>
+                                <td >{{i.tumor_type}}</td>
+                                <td >{{i.mtsa_rna_transcript_id.gene_symbol}}</td>
+                                <td >{{i.mtsa_rna_transcript_id.variant_frequency}}</td>
+                                <td >{{i.mutant_peptide_id.hla_type}}</td>
+                                <td >{{i.mutant_peptide_id.ic50_mut}}</td>
+                                <td >{{i.mutant_peptide_id.percent_mut}}</td>
+                            </tr>        
+                        {% endfor %}
+                    {% elif source == 'DNA' %}
+                        {% for i in associated_pep_object %}
+                            <tr class='clickable-row' data-href='url:/#' id="table_border_color" >
+                                <td ></td>
+                                <td ><a  href='{% url "detail_page_mtsa" i.id %}'>{{ forloop.counter }}</a></td>
+                                <td >{{i.mutant_peptide_id.tumor_protein}}<br>{{i.mutant_peptide_id.normal_protein}}</td>
+                                <td >{{i.mtsa_dna_transcript_id.transcript_id}}</td>
+                                <td >{{i.tumor_type}}</td>
+                                <td >{{i.mtsa_dna_transcript_id.gene_symbol}}</td>
+                                <td >{{i.mtsa_dna_transcript_id.variant_frequency}}</td>
+                                <td >{{i.mutant_peptide_id.hla_type}}</td>
+                                <td >{{i.mutant_peptide_id.ic50_mut}}</td>
+                                <td >{{i.mutant_peptide_id.percent_mut}}</td>
+                            </tr>        
+                        {% endfor %}
+                    {% elif source == 'aeTSA' %}
+                        {% for i in associated_pep_object %}
+                            <tr class='clickable-row' data-href='url:/#' id="table_border_color">
+                                <td ></td>
+                                <td ><a  href='{% url "detail_page_aetsa" i.id %}'>{{ forloop.counter }}</a></td>
+                                <td >{{i.mutant_peptide_id.tumor_protein}}</td>
+                                <td >{{i.tumor_type}}</td>
+                                <td >{{i.aetsa_transcript_id.gene_symbol}}</td>
+                                <td >{{i.aetsa_transcript_id.cdna_location}}</td>
+                                <td >{{i.aetsa_transcript_id.gene_element}}</td>
+                                <td >{{i.mutant_peptide_id.hla_type}}</td>
+                                <td >{{i.mutant_peptide_id.ic50_mut}}</td>
+                                <td >{{i.mutant_peptide_id.percent_mut}}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </table>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    
+<script>
+    $(function() {
+        $('#associated_peptideTable').bootstrapTable()
+    })
+    function layout1(value, row, index){
+        var x=0,tp2='',tp1='',flag=0,aa='';
+        var idx = value.indexOf("<br>"); 
+        var tp = value.substring(0,idx);
+        var np = value.substring(idx+4,); 
+        // console.log(index) 
+        for (i=0;i<idx;i++){
+            if (tp[i] != np[i]){
+                x=i;
+                aa=aa+np[i]
+            } 
+        }
+        return tp.substring(0,x)+"<nobr style='color:red;'>"+tp[x]+"</nobr>"+"<sup style='color:gray;'>"+aa+"</sup>"+tp.substring(x+1,);
+    }
+
+</script>
+
+

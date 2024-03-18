@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block title %} pep_detail {% endblock %}
+
+
+{% block content %}
+
+<div class="col-md-12" style="padding-top: 100px;"></div>
+<div class="container-sm" style=" text-align: center">
+  <div class="text-left" >
+    <button onclick="goBack()" id="inputbut">Back</button>
+  </div>
+  <div class = "row">
+    <div class="col-md-6 text-right" >
+        <h4 id = "tumorSequence" >{{tumor}}</h4>
+        <h4 id = "normalSequence" style="display: none;">{{normal}}</h4>
+        <h4 id = "pos" style="display: none;">{{pos}}</h4>
+    </div>
+    <div class=" col-md-6 text-left"  >
+        <h4>{{hla}}</h4>
+    </div> 
+  </div>
+</div>
+<div class="col-md-12" style="padding-top: 20px;"></div>
+<div class="container-sm" style=" text-align: center" >
+    <div class="card shadow">
+        <div class="card-header bg-secondary text-white">
+          <h5><strong>Gene Information</strong></h5>
+        </div>
+        <div class="card-body">
+          <table class="table text-center table-borderless">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Gene symbol</th>
+                <th scope="col">Gene ID</th>
+                <th scope="col">Transcript ID</th>
+                <th scope="col">Variant position</th>
+                <th scope="col">Reference</th>
+                <th scope="col">Variant</th>
+                <th scope="col">Amino acids change</th>
+                <th scope="col">Protein position</th>
+                <th scope="col">Tpm Normal</th>
+                <th scope="col">Tpm Tumor</th>
+                <th scope="col">Variant Frequency</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in patient_transcript_score_object %}
+                <tr>
+                    <th scope="row"></th>
+                    <td>{{ i.rna_id.gene_symbol }}</td>
+                    <td>{{ i.rna_id.gene_id }}</td>
+                    <td>{{ i.rna_id.transcript_id }}</td>
+                    <td>{{ i.rna_id.variant_position }}</td>
+                    <td>{{ i.rna_id.allele_ref }}</td>
+                    <td>{{ i.rna_id.allele_tumor }}</td>
+                    <td>{{ i.rna_id.amino_acids_change }}</td>
+                    <td>{{ i.rna_id.protein_position }}</td>
+                    <td>{{ i.tpm_normal }}</td>
+                    <td>{{ i.tpm_tumor }}</td>
+                    <td>{{ i.rna_id.variant_frequency }}</td>             
+                </tr>
+                
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+    </div>
+</div>
+<div class="col-md-12" style="padding-top: 20px;"></div>
+<div class="container-sm" style=" text-align: center" >
+  <div class="card shadow">
+    <div class="card-header bg-secondary text-white">
+        <h5><strong>Prioritizing Score</strong></h5>
+    </div>
+    <div class="card-body">
+      <table class="table text-center  table-borderless">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">IC 50</th>
+            <th scope="col">MT Rank</th>
+            <th scope="col">Best Cleavage Position</th>
+            <th scope="col">Best Cleavage Score</th>
+            <th scope="col">Binding Stability</th>
+            <th scope="col">Half Life</th>
+            <th scope="col">Stability Rank</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <th scope="row"></th>
+            <td>{{ mutant_peptide_object.ic50_mut }}</td>
+            <td>{{ mutant_peptide_object.percent_mut }}</td>
+            <td>{{ mutant_peptide_object.peptide_selection_score_id.best_cleavage_position }}</td>
+            <td>{{ mutant_peptide_object.peptide_selection_score_id.best_cleavage_score }}</td> 
+            <td>{{ mutant_peptide_object.peptide_selection_score_id.predicted_stability }}</td>
+            <td>{{ mutant_peptide_object.peptide_selection_score_id.half_life }}</td>
+            <td>{{ mutant_peptide_object.peptide_selection_score_id.stability_rank }}</td>
+          </tr>
+      
+        </tbody>
+        
+      </table>
+      <table class="table text-center  table-borderless">
+        <thead>
+          <tr>
+            <th scope="col">Average Gravy Score</th>
+            <th scope="col">Max Gravy Score</th>
+            <th scope="col">Average Hydrophobicity score</th>
+            <th scope="col">Dissimilarity</th>
+            <th scope="col">Foreignness</th>
+            <th scope="col">Foreignness IEDB_anno</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td>{{ mutant_peptide_object.peptide_selection_score_id.cterm_7mer_gravy_score }}</td>
+            <td>{{ mutant_peptide_object.peptide_selection_score_id.max_7mer_gravy_score }}</td>
+            <td>{{ mutant_peptide_object.peptide_selection_score_id.hydro_avg_score }}</td>
+            <td>{{ mutant_peptide_object.peptide_selection_score_id.dissimilarity }}</td>
+            <td>{{ mutant_peptide_object.peptide_selection_score_id.foreignness_score }}</td>
+            <td>{{ mutant_peptide_object.peptide_selection_score_id.IEDB_anno }}</td>
+          </tr>
+    
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12" style="padding-top: 20px;"></div>
+<div class="container-sm" style=" text-align: center" >
+  <div class="card shadow">
+      <div class="card-header bg-secondary text-white">
+          <h5><strong>Validated Information </strong></h5>
+      </div>
+      <div class="card-body">
+        <table class="table text-center  table-borderless">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">HLA type</th>
+              <th scope="col">Qualitative measure</th>
+              <th scope="col">IEDB assay</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            {% if dict_obj %}
+              {% for i in dict_obj %} 
+                  <tr>
+                    <th scope="row"></th>
+                    <td>{{ i.mhc_allele_name }}</td>
+                    <td>{{ i.qualitative_measure }}</td>
+                    <td><a href ="https://www.iedb.org/assay/{{i.elution_id}}" target="_blank">link</a></td>
+                    <!-- +{{ i.elution_id }} -->
+                  </tr>
+                  
+              {% endfor %}
+            {% else %}
+              <tr>
+                  <td colspan="4"><strong>None</strong></td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+
+      </div>
+  </div>
+</div>
+
+
+<script>
+
+    var np = document.getElementById("normalSequence").innerText;
+    var tp = document.getElementById("tumorSequence").innerText;
+    const x = parseInt(document.getElementById("pos").innerText, 10);
+    var aa = np[x];
+    var markedTumorSequence = tp.substring(0,x)+"<nobr style='color:red;'>"+tp[x]+"</nobr>"+"<sup style='color:gray;'>"+aa+"</sup>"+ tp.substring(x + 1,);
+    markedTumorSequence = markedTumorSequence 
+    var t = x+1;
+    document.getElementById("tumorSequence").innerHTML = markedTumorSequence;
+    function goBack() {
+            window.history.go(-1);
+        }
+
+</script>
+
+
+
+{% endblock %}

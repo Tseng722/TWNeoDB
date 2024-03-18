@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %} home {% endblock %}
+{% block content %}
+    <div class="col-md-12" style="padding-top: 100px;"></div>
+    
+    <div class="container-fluid bg-3 text-center">
+        <h3>aeTSA</h3>
+    </div>
+
+    <div class="container-sm p-3 mb-2  text-dark" style="background: #ededed;border-radius: 0px 49px 0px 0px;padding:10px; text-align: left;" >  
+        <form action="" method='POST' name="search_filter">
+            {% csrf_token %}  
+            <div class = "row">
+                <div class = "col-6">
+                    <label for="Tissue type">Tissue type : </label>
+                    <input type="text" class="input" id="tissue_type" name="tissue_type" value="{{tissue_type}}" >
+                </div>
+                <div class = "col-6">
+                    <label for="Gene symbol">Gene symbol : </label>
+                    <input type="text" class="input" id="gene_symbol" name="gene_symbol" value="{{gene_symbol}}">
+                </div>
+            </div>
+            <div class = "row">
+                
+                <div class = "col-6">
+                    <label for="Mut peptide">Mut peptide : </label>
+                    <input class="input" type="text" name="tumor_protein" value="{{tumor_protein}}">
+
+                </div>
+                <div class = "col-6">
+                    <label for="HLA type">HLA type   :  </label>
+                    <input type="text" class="input" id="hla_type" name="hla_type" value="{{hla_type}}">
+                </div>
+                
+            </div>
+            <input type="submit"  id="inputbut" value="Submit" />
+
+        </form>
+    </div>
+    
+    <div class="container-sm p-3 mb-2 text-dark text-center" style="background: #f4f4f4;padding: 10px;">
+        <table 
+            id="table" 
+            class="table table-borderless "                       
+            data-sort-class="table-active"
+            data-click-to-select="true"
+            data-filter-control="true"
+        >
+            <thead >
+                <tr >
+                    <th data-field="state" data-checkbox="true" ></th>
+                    <th data-sortable="true" >ID</th>
+                    <th data-sortable="true" >Peptide </th>
+                    <th data-sortable="true">Tissue type</th>
+                    <th data-sortable="true">Gene symbol</th>
+                    <th data-sortable="true">cDNA location</th>
+                    <th data-sortable="true">Gene element</th>
+                    <th data-sortable="true">HLA type</th>
+                    <th data-sortable="true">IC50</th>
+                    <th data-sortable="true">Mut rank</th>
+                </tr>
+            </thead>
+            
+            {% for i in page_object_aetsa %}
+                        
+                <tr class='clickable-row' data-href='url:/#' id="table_border_color">
+                            
+                    <td ></td>
+                    <td ><a  href='{% url "detail_page_aetsa" i.id %}'>{{ forloop.counter }}</a></td>
+                    <td >{{i.mutant_peptide_id.tumor_protein}}</td>
+                    <td >{{i.tumor_type}}</td>
+                    <td >{{i.aetsa_transcript_id.gene_symbol}}</td>
+                    <td >{{i.aetsa_transcript_id.cdna_location}}</td>
+                    <td >{{i.aetsa_transcript_id.gene_element}}</td>
+                    <td >{{i.mutant_peptide_id.hla_type}}</td>
+                    <td >{{i.mutant_peptide_id.ic50_mut}}</td>
+                    <td >{{i.mutant_peptide_id.percent_mut}}</td>
+                </tr>
+                        
+            {% endfor %}
+                    
+
+        </table>
+        <form action='database_aeTSA' method='GET' ></form>
+            <nav aria-label="Page navigation aetsa">
+                <ul class="pagination" id="pager">
+                    {#上一页按钮开始#}
+                    {# 如果当前页有上一页#}
+                    {% if page_object_aetsa.has_previous %}
+                        {#  当前页的上一页按钮正常使用#}
+                        <li class="previous"><a class="page-link" href="/database/aeTSA?page_aetsa=1"><span aria-hidden="true">&laquo;</span></a></li>
+                        <li class="previous"><a class="page-link" href="/database/aeTSA?page_aetsa={{ page_object_aetsa.previous_page_number }}"><span aria-hidden="true">&lsaquo;</span></a></li>
+                    {% else %}
+                        {# 当前页的不存在上一页时,上一页的按钮不可用#}
+                        <li class="previous disabled"><a class="page-link" href="/database/aeTSA?page_aetsa=1"><span aria-hidden="true">&laquo;</span></a></li>
+                    
+                        <li class="previous disabled"><a class="page-link" href="#"><span aria-hidden="true">&lsaquo;</span></a></li>
+                        
+                    {% endif %}
+                    {#上一页按钮结束#}
+                    {% if  page_num_aetsa > 5 %}
+                        <li class="page-item"><a class="page-link"href="#">...</a></li>
+                    {% endif %}
+                    {# 页码开始#}
+                    {% for num_aetsa in pa_aetsa.page_range %}
+            
+                        {% if num_aetsa == page_num_aetsa %}
+                            <li class="page-item"><a class="page-link active" href="/database/aeTSA?page_aetsa={{ num_aetsa }}">{{ num_aetsa }}</a></li>
+                        {% elif num_aetsa < page_num_aetsa %}
+                            {% if num_aetsa|add:"4" > page_num_aetsa %}
+                                <li class="page-item"><a class="page-link" href="/database/aeTSA?page_aetsa={{ num_aetsa }}">{{ num_aetsa }}</a></li>
+                            {% endif %}
+                        {% elif num_aetsa > page_num_aetsa %}
+                            {% if page_num_aetsa|add:"4" > num_aetsa %}
+                                <li class="page-item"><a class="page-link" href="/database/aeTSA?page_aetsa={{ num_aetsa }}">{{ num_aetsa }}</a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {#页码结束#}
+                    {% if  page_num_aetsa|add:"4" < pa_aetsa.num_pages %}
+                        <li class="page-item"><a class="page-link"href="#">...</a></li>
+                    {% endif %}
+                    {# 下一页按钮开始#}
+                    {% if page_object_aetsa.has_next %}
+                        <li class="next"><a class="page-link" href="/database/aeTSA?page_aetsa={{ page_object_aetsa.next_page_number }}"><span aria-hidden="true">&rsaquo;</span></a></li>
+                        <li class="next"><a class="page-link" href="/database/aeTSA?page_aetsa={{pa_aetsa.num_pages}}"><span aria-hidden="true">&raquo;</span></a></li>
+                    
+                    {% else %}
+                        <li class="next disabled"><a class="page-link" href="#"><span aria-hidden="true">&rsaquo;</span></a></li>
+                        <li class="next disabled"><a class="page-link" href="/database/aeTSA?page_aetsa={{pa_aetsa.num_pages}}"><span aria-hidden="true">&raquo;</span></a></li>
+                    
+                    {% endif %}
+                    {# 下一页按钮结束#}
+                    
+                </ul>
+            </nav>
+        </form>
+    </div>
+    <script>
+        $(function() {
+            $('#table').bootstrapTable()
+        })
+        function LinkFormatter(value, row, index) {
+                    
+            return "<a href='"+value+"'>"+value+"</a>"; 
+        }
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+            });
+        });
+    </script>  
+{% endblock %}

@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% block title %} mTSA database {% endblock %}
+{% block content %}   
+    <div class="container-fluid bg-3 text-center">
+        <h3>mTSA-RNA</h3>
+    </div>
+    <div class="container-sm p-3 mb-2  text-dark" style="background: #ededed;border-radius: 0px 49px 0px 0px;padding:10px; text-align: left;" >  
+        <form action="" method='POST' name="search_filter">
+            {% csrf_token %}
+            Mut peptide {{ mfilter.form.tumor_protein }} <br>
+            Tissue type {{ mfilter.form.tumor_type }}
+            HLA type {{ mfilter.form.hla_type }}<br>
+            Gene symbol {{ mfilter.form.gene_symbol }}
+            <input type="submit"  id="inputbut" value="Submit" />
+        </form>
+    </div>
+
+    <div class="container-sm p-3 mb-2 text-dark" style="background: #f4f4f4;padding: 10px;">
+        <table 
+            id="table" 
+            class="table table-borderless "        
+                
+            data-sort-class="table-active"
+            data-click-to-select="true"
+            data-filter-control="true"
+        >
+        <!-- data-filter-control="input" -->
+            <thead >
+                <tr >
+                    <th data-field="state" data-checkbox="true" ></th>
+                    <th data-sortable="true" >ID</th>
+                    <th data-sortable="true"  data-formatter="layout1" >Mut peptide </th>
+                    <th data-sortable="true">Tissue type</th>
+                    <th data-sortable="true">Source</th>
+                    <th data-sortable="true">Gene symbol</th>
+                    <th data-sortable="true">HLA type</th>
+                    <th data-sortable="true">IC50</th>
+                    <th data-sortable="true">Mut rank</th>
+                </tr>
+            </thead>
+            
+            {% for i in page_object %}
+                        
+                <tr class='clickable-row' data-href='url:/#' id="table_border_color">
+                            
+                    <td ></td>
+                    <td ><a  href='{% url "detail_page_mtsa_url" i.tnh %}'>{{i.tnh.id}}</a></td>
+                    <td >{{i.tnh.tumor_protein}}<br>{{i.tnh.normal_protein}}</td>
+                    <td >{{i.patient.tumor_type}}</td>
+                    <td >{{i.patient.source}}</td>
+                    <td >{{i.transcript_id.gene_symbol}}</td>
+                    <td >{{i.tnh.hla_type}}</td>
+                    <td >{{i.tnh.th.ic50}}</td>
+                    <td >{{i.tnh.th.mt}}</td>
+                        
+                </tr>
+                        
+            {% endfor %}
+                    
+
+        </table>
+        
+        <form action='database_mTSA' method='GET' ></form>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="pager">
+                    {#上一页按钮开始#}
+                    {# 如果当前页有上一页#}
+                    {% if page_object.has_previous %}
+                        {#  当前页的上一页按钮正常使用#}
+                        <li class="previous"><a class="page-link" href="/database/mTSA?page=1"><span aria-hidden="true">&laquo;</span></a></li>
+                        <li class="previous"><a class="page-link" href="/database/mTSA?page={{ page_object.previous_page_number }}"><span aria-hidden="true">&lsaquo;</span></a></li>
+                    {% else %}
+                        {# 当前页的不存在上一页时,上一页的按钮不可用#}
+                        <li class="previous disabled"><a class="page-link" href="/database/mTSA?page=1"><span aria-hidden="true">&laquo;</span></a></li>
+                    
+                        <li class="previous disabled"><a class="page-link" href="#"><span aria-hidden="true">&lsaquo;</span></a></li>
+                        
+                    {% endif %}
+                    {#上一页按钮结束#}
+                    {% if  page_num > 5 %}
+                        <li class="page-item"><a class="page-link"href="#">...</a></li>
+                    {% endif %}
+                    {# 页码开始#}
+                    {% for num in pa.page_range %}
+            
+                        {% if num == page_num %}
+                            <li class="page-item"><a class="page-link active" href="/database/mTSA?page={{ num }}">{{ num }}</a></li>
+                        {% elif num < page_num %}
+                            {% if num|add:"4" > page_num %}
+                                <li class="page-item"><a class="page-link" href="/database/mTSA?page={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                        {% elif num > page_num %}
+                            {% if page_num|add:"4" > num %}
+                                <li class="page-item"><a class="page-link" href="/database/mTSA?page={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {#页码结束#}
+                    {% if  page_num|add:"4" < pa.num_pages %}
+                        <li class="page-item"><a class="page-link"href="#">...</a></li>
+                    {% endif %}
+                    {# 下一页按钮开始#}
+                    {% if page_object.has_next %}
+                        <li class="next"><a class="page-link" href="/database/mTSA?page={{ page_object.next_page_number }}"><span aria-hidden="true">&rsaquo;</span></a></li>
+                        <li class="next"><a class="page-link" href="/database/mTSA?page={{pa.num_pages}}"><span aria-hidden="true">&raquo;</span></a></li>
+                    
+                    {% else %}
+                        <li class="next disabled"><a class="page-link" href="#"><span aria-hidden="true">&rsaquo;</span></a></li>
+                        <li class="next disabled"><a class="page-link" href="/database/mTSA?page={{pa.num_pages}}"><span aria-hidden="true">&raquo;</span></a></li>
+                    
+                    {% endif %}
+                    {# 下一页按钮结束#}
+                    
+                </ul>
+            </nav>
+        </form>
+    </div>
+    <div class="container-fluid bg-3 text-center">
+        <h3>mTSA-DNA</h3>
+    </div>
+    <div class="container-sm p-3 mb-2 text-dark" style="background: #f4f4f4;padding: 10px;">
+        <table 
+            id="table_dna" 
+            class="table table-borderless "             
+            data-sort-class="table-active"
+            data-click-to-select="true"
+            data-filter-control="true"
+            style="border:none;"
+        >
+        <!-- data-filter-control="input" -->
+            <thead >
+                <tr style="border:none;">
+                    <th data-field="state" data-checkbox="true" ></th>
+                    <th data-sortable="true" >ID</th>
+                    <th data-sortable="true"  data-formatter="layout1" >Mut peptide </th>
+                    <th data-sortable="true">Tissue type</th>
+                    <th data-sortable="true">Source</th>
+                    <th data-sortable="true">Gene symbol</th>
+                    <th data-sortable="true">HLA type</th>
+                    <th data-sortable="true">IC50</th>
+                    <th data-sortable="true">Mut rank</th>
+                </tr>
+            </thead>
+            
+            {% for i in mtsa_dna_all %}
+                        
+                <tr class='clickable-row' data-href='url:/#' id="table_border_color">
+                            
+                    <td ></td>
+                    <td >{{i.id}}</td>
+                    <td >{{i.tomur_seq}}<br>{{i.normal_seq}}</td>
+                    <td ></td>
+                    <td ></td>
+                    <td >{{i.gene_symbol}}</td>
+                    <td >{{i.hla_type}}</td>
+                    <td >{{i.ic50_mut}}</td>
+                    <td >{{i.percent_mut}}</td>
+                        
+                </tr>
+                        
+            {% endfor %}
+                    
+
+        </table>
+    </div>
+    <script>
+        // $(document).ready( function () {
+        //     $('#table_id').DataTable(); 
+        // } );
+        // $('#sort-table').bootstrapTable();
+        $(function() {
+            $('#table').bootstrapTable()
+            $('#table_dna').bootstrapTable()
+        })
+
+        
+        function layout(value, row, index){
+            var x=0,tp2='',tp1='',flag=0,aa='';
+            var idx = value.indexOf("<br>"); 
+            var tp = value.substring(0,idx);
+            var np = value.substring(idx+4,);  
+            
+            for (i=0;i<idx;i++){
+                if (tp[i] != np[i]){
+                    x=i;
+                    aa=aa+np[i]
+                }
+                
+            }
+            return tp.substring(0,x)+"<nobr style='color:red;'>"+tp[x]+"</nobr>"+tp.substring(x+1,)+"<br>"+"<nobr style='color:white;'>"+np.substring(0,x)+"</nobr>"+"<nobr style='color:gray;'>"+aa+"</nobr>";
+        }
+        function layout1(value, row, index){
+            var x=0,tp2='',tp1='',flag=0,aa='';
+            var idx = value.indexOf("<br>"); 
+            var tp = value.substring(0,idx);
+            var np = value.substring(idx+4,); 
+            // console.log(index) 
+            for (i=0;i<idx;i++){
+                if (tp[i] != np[i]){
+                    x=i;
+                    aa=aa+np[i]
+                }
+                
+            }
+            return tp.substring(0,x)+"<nobr style='color:red;'>"+tp[x]+"</nobr>"+"<sup style='color:gray;'>"+aa+"</sup>"+tp.substring(x+1,);
+        }
+
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+            });
+        });
+        function exportToExcel() {
+            const sheetName = 'My Table';
+            const fileName = 'my-table.xlsx';
+            const table = document.getElementById('table');
+            const wb = XLSX.utils.table_to_book(table, { sheet: sheetName });
+            return XLSX.writeFile(wb, fileName);
+        }
+
+    
+    </script>
+{% endblock %}

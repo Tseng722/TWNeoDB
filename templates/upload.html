@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %} test {% endblock %}
+{% block content %}   
+    <div class="col-md-12" style="padding-top: 100px;"></div>
+    <div class="container-sm" style=" text-align: center">
+        <form action='{% url "test" %}' method="POST" name="annotationTextForm">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="annotationText"></textarea>
+              
+                <div class="row">
+                    <div class="col" style="text-align: right;">
+                        <p><input type="submit"  id="inputbut" value="Submit"/></p>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <h2>Upload</h2>
+        <form action='{% url "upload_result" %}' method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="file">
+            <button type="submit">Upload</button>
+        </form>
+          
+    </div>
+{% endblock %}

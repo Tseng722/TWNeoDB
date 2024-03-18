@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %} test {% endblock %}
+{% block content %}  
+
+<div class="col-md-12" style="padding-top: 100px;"></div>
+<div class="container-sm" style=" text-align: center" >
+    <div class="card shadow">
+        <div class="card-header bg-secondary text-white">
+          <h5><strong>Patient Distribution of Different Tumor</strong></h5>
+        </div>
+        <div class="card-body">
+            {{graph_html_patient_info|safe}}
+        </div>
+    </div>
+</div>
+<div class="col-md-12" style="padding-top: 20px;"></div>
+<div class="container-sm" style=" text-align: center" >
+    <div class="card shadow">
+        <div class="card-header bg-secondary text-white">
+          <h5><strong>HLA Distribution</strong></h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-4">
+                    {{ graph_html_hla_a|safe }}
+                </div>
+                <div class="col-4">
+                    {{ graph_html_hla_b|safe }}
+                </div>
+                <div class="col-4">
+                    {{ graph_html_hla_c|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12" style="padding-top: 20px;"></div>
+<div class="container-sm" style=" text-align: center" >
+    <div class="card shadow">
+        <div class="card-header bg-secondary text-white">
+          <h5><strong>Shared Peptide Counts</strong></h5>
+        </div>
+        <div class="card-body">
+            {{ graph_html_shared_pep|safe }}
+        </div>
+        
+    </div>
+</div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %} user {% endblock %}
+{% block content %}   
+    <div class="col-md-12" style="padding-top: 100px;"></div>
+    <div class="container-sm" style=" text-align: center; margin: auto;" >
+        <div class="card shadow">
+            <div class="card-header bg-secondary text-white">
+                <h5>Prioritizing for TCR Immunogenicity</h5>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title text-dark">Please enter yout email and continue</h4>
+              {% csrf_token %}
+                <form id="emailForm" action='{% url "upload" %}' method="post">
+                    <label for="email" style = "font-size: 22px;">Email : </label>
+                    <input style = "width:400px;font-size: 25px;" type="email" id="email" name="email" required>
+                    
+                    <input style = "font-size: 20px;" id="inputbut"type="submit" value="Continue">
+                </form>
+
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}
