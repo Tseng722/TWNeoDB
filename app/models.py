@@ -559,7 +559,8 @@ class mutant_peptide(models.Model):
         db_table = 'mutant_peptide'
         indexes = [
             models.Index(fields=['tumor_protein','hla_type']), 
-            # models.Index(fields=['hla_type']),   
+            models.Index(fields=['tumor_protein']), 
+            models.Index(fields=['hla_type']),   
         ]
 
 class mtsa_rna_transcript_mutant_mapping(models.Model):
