@@ -95,9 +95,9 @@ class Command(BaseCommand):
         # print(t)
         # =====================
         # 驗證
-        # a = peptide_selection_score.objects.filter(validated_peptide_id__isnull=False)
-        # for i in a :
-        #     print(i.tumor_protein)
+        a = peptide_selection_score.objects.filter(hla_type = 'HLA-A*11:01',validated_peptide_id__isnull=False)
+        for i in a :
+            print(i.tumor_protein)
 
         # ======================
         # object turn to df
@@ -163,18 +163,18 @@ class Command(BaseCommand):
 
         # ==================
         # 儲存summary html
-        df_a = pd.read_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/hla-a.csv')
-        fig_hla_a = px.bar(df_a, x="hla_type", y="patients", color="tumor_type", title="HLA-A type")
-        graph_html_hla_a = plot(fig_hla_a, output_type='div')
-        with open('/work1791/cindy2270/web/web_v1/webV1/templates/graph_hla_a.html', 'w') as file:
-            file.write(graph_html_hla_a)
+        # df_a = pd.read_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/hla-a.csv')
+        # fig_hla_a = px.bar(df_a, x="hla_type", y="patients", color="tumor_type", title="HLA-A type")
+        # graph_html_hla_a = plot(fig_hla_a, output_type='div')
+        # with open('/work1791/cindy2270/web/web_v1/webV1/templates/graph_hla_a.html', 'w') as file:
+        #     file.write(graph_html_hla_a)
 
-        queryset = patient_info.objects.values("tumor_type").annotate(count=Count('id',distinct=True))
-        df_patient_info = read_frame(queryset)
-        fig_patient = px.pie(df_patient_info, values='count', names='tumor_type')
-        graph_html_patient_info = plot(fig_patient, output_type='div')
-        with open(OUT_HTML_DIR+'/graph_patient_info.html', 'w') as file:
-            file.write(graph_html_patient_info)
+        # queryset = patient_info.objects.values("tumor_type").annotate(count=Count('id',distinct=True))
+        # df_patient_info = read_frame(queryset)
+        # fig_patient = px.pie(df_patient_info, values='count', names='tumor_type')
+        # graph_html_patient_info = plot(fig_patient, output_type='div')
+        # with open(OUT_HTML_DIR+'/graph_patient_info.html', 'w') as file:
+        #     file.write(graph_html_patient_info)
 
 
         
