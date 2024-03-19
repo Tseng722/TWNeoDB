@@ -9,7 +9,7 @@
           <h5><strong>Patient Distribution of Different Tumor</strong></h5>
         </div>
         <div class="card-body">
-            {{graph_html_patient_info|safe}}
+            {% include 'graph_patient_info.html' %}
         </div>
     </div>
 </div>
@@ -22,13 +22,13 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-4">
-                    {{ graph_html_hla_a|safe }}
+                    {% include 'graph_hla_a.html' %}
                 </div>
                 <div class="col-4">
-                    {{ graph_html_hla_b|safe }}
+                    {% include 'graph_hla_b.html' %}
                 </div>
                 <div class="col-4">
-                    {{ graph_html_hla_c|safe }}
+                    {% include 'graph_hla_c.html' %}
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
           <h5><strong>Shared Peptide Counts</strong></h5>
         </div>
         <div class="card-body">
-            {{ graph_html_shared_pep|safe }}
+            {% include 'graph_shared_pep.html' %}
         </div>
         
     </div>

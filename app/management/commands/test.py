@@ -6,6 +6,13 @@ from django.db.models import Count
 from django.db import connection
 import pandas as pd
 from django_pandas.io import read_frame
+import plotly.graph_objects as go
+from plotly.offline import plot
+import plotly.express as px
+from django.conf import settings
+import os
+BASE_DIR = settings.BASE_DIR
+OUT_HTML_DIR = os.path.join(BASE_DIR, 'templates')
 class Command(BaseCommand):
     help = 'test'
 
@@ -135,24 +142,39 @@ class Command(BaseCommand):
         # df = pd.DataFrame(db_pep, columns=['Mutant', 'HLA Allele'])
         # df['twdb'] = df['Mutant']+'_'+df['HLA Allele']
         # twdb_list = df['twdb'].tolist()
-        data = [
-            ('GLSSRAVAL', 'HLA-A*02:01'),
-            ('LLAHVHYTV', 'HLA-A*02:01'),
-            ('YSDLHAFYY', 'HLA-A*01:01'),
-            ('FSDYYDLSY', 'HLA-A*01:01'),
-            ('LYNTVATLY', 'HLA-A*02:03'),
-            ('TLFLQMNSL', 'HLA-A*02:01')
-        ]
+        # data = [
+        #     ('GLSSRAVAL', 'HLA-A*02:01'),
+        #     ('LLAHVHYTV', 'HLA-A*02:01'),
+        #     ('YSDLHAFYY', 'HLA-A*01:01'),
+        #     ('FSDYYDLSY', 'HLA-A*01:01'),
+        #     ('LYNTVATLY', 'HLA-A*02:03'),
+        #     ('TLFLQMNSL', 'HLA-A*02:01')
+        # ]
 
-        df = pd.DataFrame(data, columns=['Peptide', 'HLA_Type'])
-        print(df)
-        for i in range(len(df)):
-            try:
-                db_pep = mutant_peptide.objects.select_related('peptide_selection_score_id').get(tumor_protein=df.at[i,'Peptide'],hla_type=df.at[i,'HLA_Type'])
-                print(db_pep.peptide_selection_score_id.tumor_protein)
-                print(db_pep.peptide_selection_score_id.cterm_7mer_gravy_score)
-            except Exception as e:
-                print(f"An error occurred: {e}")
+        # df = pd.DataFrame(data, columns=['Peptide', 'HLA_Type'])
+        # print(df)
+        # for i in range(len(df)):
+        #     try:
+        #         db_pep = mutant_peptide.objects.select_related('peptide_selection_score_id').get(tumor_protein=df.at[i,'Peptide'],hla_type=df.at[i,'HLA_Type'])
+        #         print(db_pep.peptide_selection_score_id.tumor_protein)
+        #         print(db_pep.peptide_selection_score_id.cterm_7mer_gravy_score)
+        #     except Exception as e:
+        #         print(f"An error occurred: {e}")
+
+        # ==================
+        # 儲存summary html
+        df_a = pd.read_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/hla-a.csv')
+        fig_hla_a = px.bar(df_a, x="hla_type", y="patients", color="tumor_type", title="HLA-A type")
+        graph_html_hla_a = plot(fig_hla_a, output_type='div')
+        with open('/work1791/cindy2270/web/web_v1/webV1/templates/graph_hla_a.html', 'w') as file:
+            file.write(graph_html_hla_a)
+
+        queryset = patient_info.objects.values("tumor_type").annotate(count=Count('id',distinct=True))
+        df_patient_info = read_frame(queryset)
+        fig_patient = px.pie(df_patient_info, values='count', names='tumor_type')
+        graph_html_patient_info = plot(fig_patient, output_type='div')
+        with open(OUT_HTML_DIR+'/graph_patient_info.html', 'w') as file:
+            file.write(graph_html_patient_info)
 
 
         
