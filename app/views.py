@@ -501,21 +501,21 @@ def summary(request):
     # df = read_frame(queryset)
     # df_a = df.loc[df['class_type']=='A']
     # df_a = df_a.groupby(["hla_type","tumor_type"]).size().reset_index(name="patients").sort_values(by='patients', ascending=False)
-    df_a = pd.read_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/hla-a.csv')
-    fig_hla_a = px.bar(df_a, x="hla_type", y="patients", color="tumor_type", title="HLA-A type")
-    graph_html_hla_a = plot(fig_hla_a, output_type='div')
+    # df_a = pd.read_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/hla-a.csv')
+    # fig_hla_a = px.bar(df_a, x="hla_type", y="patients", color="tumor_type", title="HLA-A type")
+    # graph_html_hla_a = plot(fig_hla_a, output_type='div')
 
     # df_b = df.loc[df['class_type']=='B']
     # df_b = df_b.groupby(["hla_type","tumor_type"]).size().reset_index(name="patients").sort_values(by='patients', ascending=False)
-    df_b = pd.read_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/hla-b.csv')
-    fig_hla_b = px.bar(df_b, x="hla_type", y="patients", color="tumor_type", title="HLA-B type")
-    graph_html_hla_b = plot(fig_hla_b, output_type='div')
+    # df_b = pd.read_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/hla-b.csv')
+    # fig_hla_b = px.bar(df_b, x="hla_type", y="patients", color="tumor_type", title="HLA-B type")
+    # graph_html_hla_b = plot(fig_hla_b, output_type='div')
 
     # df_c = df.loc[df['class_type']=='C']
     # df_c = df_c.groupby(["hla_type","tumor_type"]).size().reset_index(name="patients").sort_values(by='patients', ascending=False)
-    df_c = pd.read_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/hla-c.csv')
-    fig_hla_c = px.bar(df_c, x="hla_type", y="patients", color="tumor_type", title="HLA-C type")
-    graph_html_hla_c = plot(fig_hla_c, output_type='div')
+    # df_c = pd.read_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/hla-c.csv')
+    # fig_hla_c = px.bar(df_c, x="hla_type", y="patients", color="tumor_type", title="HLA-C type")
+    # graph_html_hla_c = plot(fig_hla_c, output_type='div')
 
 
     # queryset = shared_pep_mtsa_rna.objects.all()
@@ -529,18 +529,18 @@ def summary(request):
     
     # df = df.groupby(["patient_id","mutant_peptide_id","tumor_type"]).size().reset_index(name="Counts")
     # df = df.groupby(["mutant_peptide_id","tumor_type"]).size().reset_index(name="peptides shared with patients")
-    df = pd.read_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/shared_peptide.csv')
-    df = df.sort_values(by='peptides shared with patients', ascending=False)
-    df = df.loc[(df['peptides shared with patients']>2)]
-    df["TWNeo peptide"] = df["mutant_peptide_id"].apply(lambda x: "TWPEP_" + str(x))
-    fig = px.bar(df, x="TWNeo peptide",y= 'peptides shared with patients',color="tumor_type")
+    # df = pd.read_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/shared_peptide.csv')
+    # df = df.sort_values(by='peptides shared with patients', ascending=False)
+    # df = df.loc[(df['peptides shared with patients']>2)]
+    # df["TWNeo peptide"] = df["mutant_peptide_id"].apply(lambda x: "TWPEP_" + str(x))
+    # fig = px.bar(df, x="TWNeo peptide",y= 'peptides shared with patients',color="tumor_type")
     # # 使用 plotly 的 plot 方法生成 HTML
-    graph_html_shared_pep = plot(fig, output_type='div')
+    # graph_html_shared_pep = plot(fig, output_type='div')
 
-    queryset = patient_info.objects.values("tumor_type").annotate(count=Count('id',distinct=True))
-    df_patient_info = read_frame(queryset)
-    fig_patient = px.pie(df_patient_info, values='count', names='tumor_type')
-    graph_html_patient_info = plot(fig_patient, output_type='div')
+    # queryset = patient_info.objects.values("tumor_type").annotate(count=Count('id',distinct=True))
+    # df_patient_info = read_frame(queryset)
+    # fig_patient = px.pie(df_patient_info, values='count', names='tumor_type')
+    # graph_html_patient_info = plot(fig_patient, output_type='div')
 
     return render(request, 'summary.html',locals())
 
