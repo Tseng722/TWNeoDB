@@ -10,50 +10,7 @@
     <div class="container-sm p-3 mb-2  text-dark" style="background: #ededed;border-radius: 0px 49px 0px 0px;padding:10px; text-align: center;width:600px" >  
         <form action='{% url "database_aeTSA" %}' method="POST" name="formmtsa">
             {% csrf_token %}
-            <div class="row">
-                <div class="col-3" style="text-align: right;">
-                    <p style="height: 30px;margin: 1% ;">Tumor protein : </p>
-                </div>
-                <div class="col-9"style="text-align: left;">
-                    <p><input class="input" type="text" name="tumor_protein" placeholder="ex: MYHILNLKI"></p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-3" style="text-align: right;">
-                    <p style="height: 30px;margin: 1% ;">Tissue type :  </p>
-                </div>
-                <div class="col-9"style="text-align: left;">
-                    <select name = "tissue_type" style="width: 60%; border: none;border-radius: 15px;padding: 14px;">
-                        <option value="">Please Select...</option>
-                        {% for tumor_type in tumor_types %}
-                          <option value="{{ tumor_type }}">{{ tumor_type }}</option>
-                        {% endfor %}
-                    </select>
-                    
-                    <p></p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-3" style="text-align: right;">
-                    <p style="height: 30px;margin: 1% ;">Gene symbol :  </p>
-                </div>
-                <div class="col-9"style="text-align: left;">
-                    <p><input class="input" type="text" name="gene_symbol" placeholder="ex: CHUK"></p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-3" style="text-align: right;">
-                    <p style="height: 30px;margin: 1% ;">HLA type :     </p>
-                </div>
-                <div class="col-9"style="text-align: left;">
-                    <p><input class="input" type="text" name="hla_type" placeholder="ex: HLA-A*24:02"></p>
-                </div> 
-            </div>
-            <div class="row">
-                <div class="col" style="text-align: right;">
-                    <p><input type="submit"  id="inputbut" value="Submit"/></p>
-                </div>
-            </div>
+            {% include '_search.html' %}
             
         </form>
 

@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-3" style="text-align: right;">
+        <p style="height: 30px;margin: 1% ;">Tumor protein : </p>
+    </div>
+    <div class="col-9"style="text-align: left;">
+        <p><input class="input" type="text" name="tumor_protein" placeholder="ex: MYHILNLKI"></p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-3" style="text-align: right;">
+        <p style="height: 30px;margin: 1% ;">Tissue type :  </p>
+    </div>
+    <div class="col-9"style="text-align: left;">
+        <!-- <label for="your_dropdown">選擇項目：</label> -->
+        <select name = "tissue_type" style="width: 60%; border: none;border-radius: 15px;padding: 14px;">
+            <option value="">Please Select...</option>
+            {% for tumor_type in tumor_types %}
+              <option value="{{ tumor_type }}">{{ tumor_type }}</option>
+            {% endfor %}
+        </select>
+        
+        <p></p>
+        <!-- <p><input class="input" type="text" name="tissue_type" placeholder="ex: colon"></p> -->
+    </div>
+</div>
+<div class="row">
+    <div class="col-3" style="text-align: right;">
+        <p style="height: 30px;margin: 1% ;">Gene symbol :  </p>
+    </div>
+    <div class="col-9"style="text-align: left;">
+        <p><input class="input" type="text" name="gene_symbol" placeholder="ex: CHUK"></p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-3" style="text-align: right;">
+        <p style="height: 30px;margin: 1% ;">HLA type :     </p>
+    </div>
+    <div class="col-9"style="text-align: left;">
+        <p><input class="input" type="text" name="hla_type" placeholder="ex: HLA-A*11:01"></p>
+    </div> 
+</div>
+<div class="row">
+    <div class="col" style="text-align: right;">
+        <p><input type="submit"  id="inputbut" value="Submit"/></p>
+    </div>
+</div>
