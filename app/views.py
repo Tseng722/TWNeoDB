@@ -250,6 +250,7 @@ def browse_mtsa(request):
     tissue_type = request.session['tissue_type']
     gene_symbol = request.session['gene_symbol']
     hla_type = request.session['hla_type']
+    source = 'mTSA'
     
     # mtsa_dna_query = Q(mutant_peptide_id__tumor_protein__icontains=tumor_protein) & \
     #              Q(mutant_peptide_id__hla_type__icontains=hla_type) & \
@@ -331,6 +332,7 @@ def browse_aetsa(request):
     tissue_type = request.session['tissue_type']
     gene_symbol = request.session['gene_symbol']
     hla_type = request.session['hla_type']
+    source = 'aeTSA'
     aetsa_all = aetsa_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('aetsa_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,aetsa_transcript_id__gene_symbol__icontains = gene_symbol)
     
     # 
@@ -356,20 +358,35 @@ def download_user_filter_peptides(request):
         request.session['tissue_type'] = request.POST.get('tissue_type', '')
         request.session['gene_symbol'] = request.POST.get('gene_symbol', '')
         request.session['hla_type'] = request.POST.get('hla_type','')
+        request.session['source'] = request.POST.get('source')
     tumor_protein = request.session['tumor_protein']
     tissue_type = request.session['tissue_type']
     gene_symbol = request.session['gene_symbol']
     hla_type = request.session['hla_type']
-    
-    queryset = aetsa_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('aetsa_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,aetsa_transcript_id__gene_symbol__icontains = gene_symbol)
-    mtsa_dna = mtsa_dna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_dna_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,mtsa_dna_transcript_id__gene_symbol__icontains=gene_symbol )
-    mtsa_rna = mtsa_rna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_rna_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,mtsa_rna_transcript_id__gene_symbol__icontains = gene_symbol)
+    source = request.session['source']
+    if source=='mTSA':
+        mtsa_dna = mtsa_dna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_dna_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,mtsa_dna_transcript_id__gene_symbol__icontains=gene_symbol )
+        mtsa_rna = mtsa_rna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_rna_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,mtsa_rna_transcript_id__gene_symbol__icontains = gene_symbol)
+        queryset = mtsa_rna.values_list('mutant_peptide_id__tumor_protein','mutant_peptide_id__hla_type','mtsa_rna_transcript_id__transcript_id','mtsa_rna_transcript_id__gene_symbol','mutant_peptide_id__ic50_mut','mutant_peptide_id__percent_mut','mutant_peptide_id__peptide_selection_score_id__stability_rank','mutant_peptide_id__peptide_selection_score_id__best_cleavage_position','mutant_peptide_id__peptide_selection_score_id__hydro_avg_score','mutant_peptide_id__peptide_selection_score_id__foreignness_score','mutant_peptide_id__peptide_selection_score_id__IEDB_anno','mutant_peptide_id__peptide_selection_score_id__dissimilarity','mutant_peptide_id__peptide_selection_score_id__validated_peptide_id')
+        df = pd.DataFrame(queryset, columns=['Mutant Peptide', 'HLA Allele','Esemble Transcript ID','Gene Symbol','IC50','Percentage Mutant Rank','Stability Rank','Best Cleavage Position','Hydrophobicity','Foreignness Score','IEDB Annotation','Dissimilarity to Self','Validated'])
+        df['Source From'] = 'mTSA RNA'
+        queryset = mtsa_dna.values_list('mutant_peptide_id__tumor_protein','mutant_peptide_id__hla_type','mtsa_dna_transcript_id__transcript_id','mtsa_dna_transcript_id__gene_symbol','mutant_peptide_id__ic50_mut','mutant_peptide_id__percent_mut','mutant_peptide_id__peptide_selection_score_id__stability_rank','mutant_peptide_id__peptide_selection_score_id__best_cleavage_position','mutant_peptide_id__peptide_selection_score_id__hydro_avg_score','mutant_peptide_id__peptide_selection_score_id__foreignness_score','mutant_peptide_id__peptide_selection_score_id__IEDB_anno','mutant_peptide_id__peptide_selection_score_id__dissimilarity','mutant_peptide_id__peptide_selection_score_id__validated_peptide_id')
+        df_d = pd.DataFrame(queryset, columns=['Mutant Peptide', 'HLA Allele','Esemble Transcript ID','Gene Symbol','IC50','Percentage Mutant Rank','Stability Rank','Best Cleavage Position','Hydrophobicity','Foreignness Score','IEDB Annotation','Dissimilarity to Self','Validated'])
+        df_d['Source From'] = 'mTSA DNA'
+        df = pd.concat([df,df_d])
+        df['Validated'] = df['Validated'].apply(lambda x: 'Yes' if not pd.isna(x) else 'No')
+    elif source=='aeTSA':
+        aetsa = aetsa_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('aetsa_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,aetsa_transcript_id__gene_symbol__icontains = gene_symbol)
+        queryset = aetsa.values_list('mutant_peptide_id__tumor_protein','mutant_peptide_id__hla_type','aetsa_transcript_id__gene_symbol','aetsa_transcript_id__gene_element','aetsa_transcript_id__cdna_location','mutant_peptide_id__ic50_mut','mutant_peptide_id__percent_mut','mutant_peptide_id__peptide_selection_score_id__stability_rank','mutant_peptide_id__peptide_selection_score_id__best_cleavage_position','mutant_peptide_id__peptide_selection_score_id__hydro_avg_score','mutant_peptide_id__peptide_selection_score_id__foreignness_score','mutant_peptide_id__peptide_selection_score_id__IEDB_anno','mutant_peptide_id__peptide_selection_score_id__dissimilarity','mutant_peptide_id__peptide_selection_score_id__validated_peptide_id')
+        df = pd.DataFrame(queryset, columns=['Mutant Peptide', 'HLA Allele','Gene Symbol','Gene Element','cDNA Location','IC50','Percentage Mutant Rank','Stability Rank','Best Cleavage Position','Hydrophobicity','Foreignness Score','IEDB Annotation','Dissimilarity to Self','Validated'])
+        df['Source From'] = 'aeTSA RNA'
+        df['Validated'] = df['Validated'].apply(lambda x: 'Yes' if not pd.isna(x) else 'No')
     
     # Convert queryset to DataFrame
-    df = pd.DataFrame(list(queryset.values()))
+    # df = pd.DataFrame(list(queryset.values()))
     # Set up response
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="your_model_data.csv"'
+    response['Content-Disposition'] = 'attachment; filename="TWNeoDB.csv"'
     df.to_csv(path_or_buf=response, index=False)
 
     return response

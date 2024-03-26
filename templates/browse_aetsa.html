@@ -37,6 +37,9 @@
 
         </form>
     </div>
+    <button type="button" id="downloadFilterbtn" data-bs-toggle="modal" data-bs-target="#downloadFilterModal" >
+        Download
+    </button>
     
     <div class="container-sm p-3 mb-2 text-dark text-center" style="background: #f4f4f4;padding: 10px;">
         <table 
@@ -137,6 +140,7 @@
             </nav>
         </form>
     </div>
+    {% include '_download_filter.html'%}
     <script>
         $(function() {
             $('#table').bootstrapTable()

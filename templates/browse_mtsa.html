@@ -34,10 +34,12 @@
             </div>
             <input type="submit"  id="inputbut" value="Submit" />
             
-            <button type="submit" id="inputbut"formaction="{% url 'download_user_filter_peptides' %}">Download</button>
+            <!-- <button type="submit" id="inputbut"formaction="{% url 'download_user_filter_peptides' %}">Download</button> -->
         </form>
-        
     </div>
+    <button type="button" id="downloadFilterbtn" data-bs-toggle="modal" data-bs-target="#downloadFilterModal" >
+        Download
+    </button>
     <div class="container-fluid bg-3 text-center">
         <h3>mTSA-RNA</h3>
     </div>
@@ -221,7 +223,7 @@
         </form>
     </div>
 
-
+    {% include '_download_filter.html'%}
 
 
 
