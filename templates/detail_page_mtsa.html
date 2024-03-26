@@ -28,6 +28,9 @@
           
           {% elif i.tumor_type == 'oral' %}
             <span class="badge bg-success">{{i.tumor_type}}</span>
+          {% elif i.tumor_type == 'lung' %}
+            <span class="badge bg-warning">{{i.tumor_type}}</span>
+          
           {% endif %}
         {% endfor %}
       </h5>
