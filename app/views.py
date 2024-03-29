@@ -61,9 +61,9 @@ def index(request):
     total_patient_count = patient_info.objects.count()
 
     total_hla_count = peptide_selection_score.objects.values('hla_type').distinct().count()
-    mtsa_rna_count = mtsa_rna_transcript_mutant_mapping.objects.values('mutant_peptide_id').distinct().count()
-    mtsa_dna_count = mtsa_dna_transcript_mutant_mapping.objects.values('mutant_peptide_id').distinct().count()
-    aetsa_count = aetsa_transcript_mutant_mapping.objects.values('mutant_peptide_id').distinct().count()
+    mtsa_rna_count = mtsa_rna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').values('mutant_peptide_id__tumor_protein').distinct().count()
+    mtsa_dna_count = mtsa_dna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').values('mutant_peptide_id__tumor_protein').distinct().count()
+    aetsa_count = aetsa_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').values('mutant_peptide_id__tumor_protein').distinct().count()
     validated_pep_count = validated_peptide.objects.values('tumor_protein').distinct().count()
     return render(request,"home.html",locals())
 
