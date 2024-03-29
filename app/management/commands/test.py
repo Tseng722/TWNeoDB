@@ -177,6 +177,14 @@ class Command(BaseCommand):
         #     file.write(graph_html_patient_info)
 
 
+        # mutant_pep = mutant_peptide.
+        data = shared_pep_mtsa_rna.objects.select_related('mutant_peptide_id').values("patient_id","mutant_peptide_id__tumor_protein","tumor_type").distinct()
+        mtsa_rna = data.values("mutant_peptide_id__tumor_protein","tumor_type").annotate(count=Count('patient_id',distinct=True))
+        df_mtsa_rna = read_frame(mtsa_rna.filter(count__gt=1))
+        print(df_mtsa_rna)
+        
+
+
         
 
         

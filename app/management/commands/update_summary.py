@@ -71,18 +71,22 @@ class Command(BaseCommand):
         with open(OUT_HTML_DIR+'/graph_hla_c.html', 'w') as file:
             file.write(graph_html_hla_c)
         print('hla_c')
+        
 
-        data = shared_pep_mtsa_rna.objects.values("patient_id","mutant_peptide_id","tumor_type").distinct()
-        mtsa_rna = data.values("mutant_peptide_id","tumor_type").annotate(count=Count('patient_id',distinct=True))
+        # data = shared_pep_mtsa_rna.objects.values("patient_id","mutant_peptide_id","tumor_type").distinct()
+        # mtsa_rna = data.values("mutant_peptide_id","tumor_type").annotate(count=Count('patient_id',distinct=True))
+        data = shared_pep_mtsa_rna.objects.select_related('mutant_peptide_id').values("patient_id","mutant_peptide_id__tumor_protein","tumor_type").distinct()
+        mtsa_rna = data.values("mutant_peptide_id__tumor_protein","tumor_type").annotate(count=Count('patient_id',distinct=True))
         df_mtsa_rna = read_frame(mtsa_rna.filter(count__gt=1))
         df_mtsa_rna['tsa type'] = 'mTSA(RNA)'
-        data = shared_pep_mtsa_dna.objects.values("patient_id","mutant_peptide_id","tumor_type").distinct()
-        mtsa_dna = data.values("mutant_peptide_id","tumor_type").annotate(count=Count('patient_id',distinct=True))
+
+        data = shared_pep_mtsa_dna.objects.values("patient_id","mutant_peptide_id__tumor_protein","tumor_type").distinct()
+        mtsa_dna = data.values("mutant_peptide_id__tumor_protein","tumor_type").annotate(count=Count('patient_id',distinct=True))
         df_mtsa_dna = read_frame(mtsa_dna.filter(count__gt=1))
         df_mtsa_dna['tsa type'] = 'mTSA(DNA)'
 
-        data = shared_pep_aetsa.objects.values("patient_id","mutant_peptide_id","tumor_type").distinct()
-        aetsa = data.values("mutant_peptide_id","tumor_type").annotate(count=Count('patient_id',distinct=True))
+        data = shared_pep_aetsa.objects.values("patient_id","mutant_peptide_id__tumor_protein","tumor_type").distinct()
+        aetsa = data.values("mutant_peptide_id__tumor_protein","tumor_type").annotate(count=Count('patient_id',distinct=True))
         df_aetsa = read_frame(aetsa.filter(count__gt=1))
         df_aetsa['tsa type'] = 'aeTSA'
 
@@ -91,7 +95,9 @@ class Command(BaseCommand):
         df.to_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/shared_peptide.csv',index = False)
         df = df.sort_values(by='peptides shared with patients', ascending=False)
         df = df.loc[(df['peptides shared with patients']>2)]
-        df["TWNeo peptide"] = df["mutant_peptide_id"].apply(lambda x: "TWPEP_" + str(x))
+        # df["TWNeo peptide"] = df["mutant_peptide_id"].apply(lambda x: "TWPEP_" + str(x))
+        df = df.rename(columns={'mutant_peptide_id__tumor_protein':'TWNeo peptide'})
+        
         fig = px.bar(df, x="TWNeo peptide",y= 'peptides shared with patients',color="tumor_type")
         graph_html_shared_pep = plot(fig, output_type='div')
         with open(OUT_HTML_DIR+'/graph_shared_pep.html', 'w') as file:
