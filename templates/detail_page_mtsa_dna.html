@@ -212,28 +212,7 @@
             </table>
           </div>
           <div class="col-6">
-            <h5><strong>Validated immunogenicity</strong></h5>
-            <table class="table text-center  table-borderless">
-              {% if validated_peptide %}
-                <tr>
-                  <th>Immunogenicity</th>
-                  <th>IEDB</th>
-                  <th>DeepNeo</th>
-                  <th>Prime</th>
-                </tr>
-                <tr>
-                  <td>{% if validated_peptide.tcr == 1 %}Yes{% elif validated_peptide.tcr == 0 %}No{% endif %}</td>
-                  <td>{% if validated_peptide.iedb_tcr == 1 %}Y{% elif validated_peptide.iedb_tcr == 0 %}N{% endif %}</td>
-                  <td>{% if validated_peptide.deepneo == 1 %}Y{% elif validated_peptide.deepneo == 0 %}N{% endif %}</td>
-                  <td>{% if validated_peptide.prime == 1 %}Y{% elif validated_peptide.prime == 0 %}N{% endif %}</td>
-                </tr>
-
-              {% else %}
-                <tr>
-                  <td colspan="4"><strong>None</strong></td>
-                </tr>
-              {% endif %}
-            </table>
+            {% include '_validated_peptide.html' %}
           </div>
         </div>
       </div>

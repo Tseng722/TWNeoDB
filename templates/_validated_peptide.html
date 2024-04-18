@@ -1,0 +1,28 @@
+<h5><strong>Validated immunogenicity</strong></h5>
+<table class="table text-center  table-borderless">
+    <tr>
+    <th>Immunogenicity</th>
+    </tr>
+    <tr>
+    <td>{% if validated_peptide.tcr == 1 %}Positive{% elif validated_peptide.tcr == 0 %}Negative{% endif %}</td>
+    </tr>
+</table>
+<table class="table text-center  table-borderless">
+    {% if validated_peptide %}
+    <tr>
+        <th>IEDB</th>
+        <th>DeepNeo</th>
+        <th>Prime</th>
+    </tr>
+    <tr>
+        <td>{% if validated_peptide.iedb_tcr == 1 %}Yes{% elif validated_peptide.iedb_tcr == 0 %}No{% endif %}</td>
+        <td>{% if validated_peptide.deepneo == 1 %}Yes{% elif validated_peptide.deepneo == 0 %}No{% endif %}</td>
+        <td>{% if validated_peptide.prime == 1 %}Yes{% elif validated_peptide.prime == 0 %}No{% endif %}</td>
+    </tr>
+
+    {% else %}
+    <tr>
+        <td colspan="4"><strong>None</strong></td>
+    </tr>
+    {% endif %}
+</table>
