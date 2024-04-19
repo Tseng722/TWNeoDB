@@ -259,7 +259,8 @@ def browse_mtsa(request):
 
     mtsa_rna = mtsa_rna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_rna_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,mtsa_rna_transcript_id__gene_symbol__icontains = gene_symbol)
     # mtsa_rna = mtsa_rna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_rna_transcript_id').filter(mtsa_dna_query)
- 
+    total_count_rna = mtsa_rna.count()
+    total_page_rna = int(total_count_rna/10)
     pa_rna = Paginator(mtsa_rna, per_page=10)
     page_num_rna = request.GET.get('page_rna', 1)
     try:
@@ -269,6 +270,8 @@ def browse_mtsa(request):
         page_object_rna = pa_rna.get_page(1)
     # DNA #
     mtsa_dna = mtsa_dna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_dna_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,mtsa_dna_transcript_id__gene_symbol__icontains=gene_symbol )
+    total_count_dna = mtsa_dna.count()
+    total_page_dna = int(total_count_dna/10)
     pa_dna = Paginator(mtsa_dna, per_page=10)
     page_num_dna = request.GET.get('page_dna', 1)
     try:
@@ -334,7 +337,8 @@ def browse_aetsa(request):
     hla_type = request.session['hla_type']
     source = 'aeTSA'
     aetsa_all = aetsa_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('aetsa_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,aetsa_transcript_id__gene_symbol__icontains = gene_symbol)
-    
+    total_count = aetsa_all.count()
+    total_page = int(total_count/10)
     # 
     pa_aetsa = Paginator(aetsa_all, per_page=10)
     page_num_aetsa = request.GET.get('page_aetsa', 1)

@@ -95,9 +95,9 @@ class Command(BaseCommand):
         # print(t)
         # =====================
         # 驗證
-        a = peptide_selection_score.objects.filter(hla_type = 'HLA-A*11:01',validated_peptide_id__isnull=False)
-        for i in a :
-            print(i.tumor_protein)
+        # a = peptide_selection_score.objects.filter(hla_type = 'HLA-A*11:01',validated_peptide_id__isnull=False)
+        # for i in a :
+        #     print(i.tumor_protein)
 
         # ======================
         # object turn to df
@@ -176,13 +176,22 @@ class Command(BaseCommand):
         # with open(OUT_HTML_DIR+'/graph_patient_info.html', 'w') as file:
         #     file.write(graph_html_patient_info)
 
+        #=============================
+        ## mutant_pep = mutant_peptide.
+        # data = shared_pep_mtsa_rna.objects.select_related('mutant_peptide_id').values("patient_id","mutant_peptide_id__tumor_protein","tumor_type").distinct()
+        # mtsa_rna = data.values("mutant_peptide_id__tumor_protein","tumor_type").annotate(count=Count('patient_id',distinct=True))
+        # df_mtsa_rna = read_frame(mtsa_rna.filter(count__gt=1))
+        # print(df_mtsa_rna)
+        #=============================
+        #ig gene
+        data = mtsa_rna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_rna_transcript_id').values("mutant_peptide_id__tumor_protein","mtsa_rna_transcript_id__gene_symbol").filter(mtsa_rna_transcript_id__gene_symbol__icontains='IGKV')
+        df = read_frame(data)
+        # df2 = df.groupby(["mutant_peptide_id__tumor_protein","mtsa_rna_transcript_id__gene_symbol"]).size().reset_index(name="Counts")
+        print(len(df))
+        print(df)
 
-        # mutant_pep = mutant_peptide.
-        data = shared_pep_mtsa_rna.objects.select_related('mutant_peptide_id').values("patient_id","mutant_peptide_id__tumor_protein","tumor_type").distinct()
-        mtsa_rna = data.values("mutant_peptide_id__tumor_protein","tumor_type").annotate(count=Count('patient_id',distinct=True))
-        df_mtsa_rna = read_frame(mtsa_rna.filter(count__gt=1))
-        print(df_mtsa_rna)
         
+
 
 
         
