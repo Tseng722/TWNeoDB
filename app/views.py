@@ -246,10 +246,18 @@ def browse_mtsa(request):
         request.session['tissue_type'] = request.POST.get('tissue_type', '')
         request.session['gene_symbol'] = request.POST.get('gene_symbol', '')
         request.session['hla_type'] = request.POST.get('hla_type','')
+        request.session['ic50_min'] = request.POST.get('ic50_min',0)
+        request.session['ic50_max'] = request.POST.get('ic50_max',100000)
+        request.session['mut_min'] = request.POST.get('mut_min',0)
+        request.session['mut_max'] = request.POST.get('mut_max',100)
     tumor_protein = request.session['tumor_protein']
     tissue_type = request.session['tissue_type']
     gene_symbol = request.session['gene_symbol']
     hla_type = request.session['hla_type']
+    ic50_min = request.session['ic50_min']
+    ic50_max = request.session['ic50_max']
+    mut_min = request.session['mut_min']
+    mut_max = request.session['mut_max']
     source = 'mTSA'
     
     # mtsa_dna_query = Q(mutant_peptide_id__tumor_protein__icontains=tumor_protein) & \
@@ -257,7 +265,7 @@ def browse_mtsa(request):
     #              Q(tumor_type__icontains=tissue_type) & \
     #              Q(mtsa_dna_transcript_id__gene_symbol__icontains=gene_symbol)
 
-    mtsa_rna = mtsa_rna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_rna_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,mtsa_rna_transcript_id__gene_symbol__icontains = gene_symbol)
+    mtsa_rna = mtsa_rna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_rna_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,mtsa_rna_transcript_id__gene_symbol__icontains = gene_symbol,mutant_peptide_id__ic50_mut__gte = ic50_min,mutant_peptide_id__ic50_mut__lte = ic50_max,mutant_peptide_id__percent_mut__gte = mut_min,mutant_peptide_id__percent_mut__lte = mut_max)
     # mtsa_rna = mtsa_rna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_rna_transcript_id').filter(mtsa_dna_query)
     total_count_rna = mtsa_rna.count()
     total_page_rna = int(total_count_rna/10)
@@ -269,7 +277,7 @@ def browse_mtsa(request):
     except:
         page_object_rna = pa_rna.get_page(1)
     # DNA #
-    mtsa_dna = mtsa_dna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_dna_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,mtsa_dna_transcript_id__gene_symbol__icontains=gene_symbol )
+    mtsa_dna = mtsa_dna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_dna_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,mtsa_dna_transcript_id__gene_symbol__icontains=gene_symbol,mutant_peptide_id__ic50_mut__gte = ic50_min,mutant_peptide_id__ic50_mut__lte = ic50_max,mutant_peptide_id__percent_mut__gte = mut_min,mutant_peptide_id__percent_mut__lte = mut_max )
     total_count_dna = mtsa_dna.count()
     total_page_dna = int(total_count_dna/10)
     pa_dna = Paginator(mtsa_dna, per_page=10)
@@ -331,12 +339,20 @@ def browse_aetsa(request):
         request.session['tissue_type'] = request.POST.get('tissue_type', '')
         request.session['gene_symbol'] = request.POST.get('gene_symbol', '')
         request.session['hla_type'] = request.POST.get('hla_type','')
+        request.session['ic50_min'] = request.POST.get('ic50_min',0)
+        request.session['ic50_max'] = request.POST.get('ic50_max',100000)
+        request.session['mut_min'] = request.POST.get('mut_min',0)
+        request.session['mut_max'] = request.POST.get('mut_max',100)
     tumor_protein = request.session['tumor_protein']
     tissue_type = request.session['tissue_type']
     gene_symbol = request.session['gene_symbol']
     hla_type = request.session['hla_type']
+    ic50_min = request.session['ic50_min']
+    ic50_max = request.session['ic50_max']
+    mut_min = request.session['mut_min']
+    mut_max = request.session['mut_max']
     source = 'aeTSA'
-    aetsa_all = aetsa_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('aetsa_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,aetsa_transcript_id__gene_symbol__icontains = gene_symbol)
+    aetsa_all = aetsa_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('aetsa_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = tumor_protein,mutant_peptide_id__hla_type__icontains = hla_type, tumor_type__icontains = tissue_type,aetsa_transcript_id__gene_symbol__icontains = gene_symbol,mutant_peptide_id__ic50_mut__gte = ic50_min,mutant_peptide_id__ic50_mut__lte = ic50_max,mutant_peptide_id__percent_mut__gte = mut_min,mutant_peptide_id__percent_mut__lte = mut_max)
     total_count = aetsa_all.count()
     total_page = int(total_count/10)
     # 
