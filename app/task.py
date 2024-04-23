@@ -3,7 +3,7 @@ from app.ip import get_location
 from os import path, makedirs, getcwd
 from django.conf import settings
 
-from app.score import pvac,hydro,similarity,is_pep_in_db,iedb_api
+from app.score import pvac,hydro,similarity,is_pep_in_db,iedb_api,bigmhc
 
 from app.ip import get_location
 from django.http import HttpResponse
@@ -67,6 +67,10 @@ def all_score(job_uuid):
     df_final = iedb_api(df_final)
     file_path = os.path.join(output,'final_score.csv')   
 
+    df_final.to_csv(file_path,index =False)
+    df_bigmhc = bigmhc(file_path,output)
+    df_final = pd.merge(df_final,df_bigmhc,how='outer',left_on=['Peptide','HLA_Type'],right_on = ['pep','mhc'], indicator=True)
+    df_final.drop(columns=['_merge','pep','mhc'], inplace=True)
     df_final.to_csv(file_path,index =False)
 
     user_job.objects.filter(uuid=job_uuid).update(status="SUCCESS",end_time = timezone.now())

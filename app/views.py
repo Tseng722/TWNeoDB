@@ -519,7 +519,7 @@ def view_result(request,job_uuid):
             output = OUT_FILE_DIR + job_uuid
             df_final = pd.read_csv(output+'/final_score.csv')
             df_final = df_final.fillna('')
-            df_final = df_final[['Peptide','HLA_Type','In TWNeoDB','IEDB Qualitative','Length','IC50','Percentile','hydro_score','Predicted Stability','Half Life','Stability Rank','cterm_7mer_gravy_score','max_7mer_gravy_score','Best Cleavage Position','Best Cleavage Score','dissimilarity','foreignness_score','IEDB_anno']]
+            df_final = df_final[['Peptide','HLA_Type','Length','In TWNeoDB','IEDB Qualitative','IEDB_anno','IC50','Percentile','hydro_score','Predicted Stability','Half Life','Stability Rank','cterm_7mer_gravy_score','max_7mer_gravy_score','Best Cleavage Position','Best Cleavage Score','dissimilarity','foreignness_score','BigMHC_IM']]
         elif job_status=='WAITTING':
             df_final = []
         elif job_status=='FAILED': 

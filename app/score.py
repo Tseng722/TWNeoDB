@@ -223,3 +223,14 @@ def iedb_api(df):
         df_iedb = pd.concat([df_iedb,df_tmp],axis = 0)
     df = pd.merge(df,df_iedb,how='outer',right_on=['Peptide','HLA_Type'],left_on=['Peptide','HLA_Type'])
     return df
+
+def bigmhc(file_path,output_dir):
+    output_file = output_dir+'/bigmhc_result.csv'
+    command = f'python /work1791/cindy2270/bigmhc/bigmhc/src/predict.py -i={file_path} -m=im -a=1 -p=0 -c=1 -o={output_file} -d="cpu"'
+    try:
+        subprocess.run(command, shell=True, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}")
+    df_bigmhc = pd.read_csv(output_file)
+    df_bigmhc.drop(columns=['tgt','len'], inplace=True)
+    return df_bigmhc

@@ -1,0 +1,28 @@
+Executing MHC Class I predictions
+Splitting FASTA into smaller chunks
+Splitting FASTA into smaller chunks - Entries 1-2
+Completed
+Making binding predictions on Allele HLA-A*01:01 and Epitope Length 9 with Method NetMHCpan - File /work1791/cindy2270/web/web_v1/webV1/tmp/5713c53e-4ede-57cd-9de8-69e92b97302b/HLA-A*01:01_9/MHC_Class_I/tmp/HLA-A*01:01_9.netmhcpan.HLA-A*01:01.9.tsv_1-2
+Making binding predictions on Allele HLA-A*01:01 and Epitope Length 9 with Method NetMHC - File /work1791/cindy2270/web/web_v1/webV1/tmp/5713c53e-4ede-57cd-9de8-69e92b97302b/HLA-A*01:01_9/MHC_Class_I/tmp/HLA-A*01:01_9.ann.HLA-A*01:01.9.tsv_1-2
+Making binding predictions on Allele HLA-A*01:01 and Epitope Length 9 with Method NetMHC - File /work1791/cindy2270/web/web_v1/webV1/tmp/5713c53e-4ede-57cd-9de8-69e92b97302b/HLA-A*01:01_9/MHC_Class_I/tmp/HLA-A*01:01_9.ann.HLA-A*01:01.9.tsv_1-2 - Completed
+Making binding predictions on Allele HLA-A*01:01 and Epitope Length 9 with Method NetMHCpan - File /work1791/cindy2270/web/web_v1/webV1/tmp/5713c53e-4ede-57cd-9de8-69e92b97302b/HLA-A*01:01_9/MHC_Class_I/tmp/HLA-A*01:01_9.netmhcpan.HLA-A*01:01.9.tsv_1-2 - Completed
+Parsing prediction file for Allele HLA-A*01:01 and Epitope Length 9 - Entries 1-2
+Parsing prediction file for Allele HLA-A*01:01 and Epitope Length 9 - Entries 1-2 - Completed
+Combining Parsed Prediction Files
+Completed
+Creating aggregated report
+Completed
+Calculating Manufacturability Metrics
+Completed
+Running Binding Filters
+Completed
+Running Top Score Filter
+Completed
+Submitting remaining epitopes to NetChop
+Completed
+Running NetMHCStabPan
+Completed
+
+Done: Pipeline finished successfully. File /work1791/cindy2270/web/web_v1/webV1/tmp/5713c53e-4ede-57cd-9de8-69e92b97302b/HLA-A*01:01_9/MHC_Class_I/HLA-A*01:01_9.filtered.tsv contains list of filtered putative neoantigens.
+
+No MHC class II prediction algorithms chosen. Skipping MHC class II predictions.

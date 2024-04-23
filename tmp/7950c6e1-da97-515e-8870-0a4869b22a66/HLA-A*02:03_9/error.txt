@@ -1,0 +1,69 @@
+Traceback (most recent call last):
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/urllib3/connection.py", line 200, in _new_conn
+    sock = connection.create_connection(
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/urllib3/util/connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/socket.py", line 954, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -2] Name or service not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/urllib3/connectionpool.py", line 790, in urlopen
+    response = self._make_request(
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/urllib3/connectionpool.py", line 491, in _make_request
+    raise new_e
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/urllib3/connectionpool.py", line 467, in _make_request
+    self._validate_conn(conn)
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/urllib3/connectionpool.py", line 1092, in _validate_conn
+    conn.connect()
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/urllib3/connection.py", line 604, in connect
+    self.sock = sock = self._new_conn()
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/urllib3/connection.py", line 207, in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+urllib3.exceptions.NameResolutionError: <urllib3.connection.HTTPSConnection object at 0x7f0d41f016a0>: Failed to resolve 'services.healthtech.dtu.dk' ([Errno -2] Name or service not known)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/urllib3/connectionpool.py", line 844, in urlopen
+    retries = retries.increment(
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/urllib3/util/retry.py", line 515, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='services.healthtech.dtu.dk', port=443): Max retries exceeded with url: /cgi-bin/webface2.cgi (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f0d41f016a0>: Failed to resolve 'services.healthtech.dtu.dk' ([Errno -2] Name or service not known)"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/cindy2270/miniconda3/envs/web/bin/pvacbind", line 8, in <module>
+    sys.exit(main())
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/pvactools/tools/pvacbind/main.py", line 93, in main
+    args[0].func.main(args[1])
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/pvactools/tools/pvacbind/run.py", line 108, in main
+    pipeline.execute()
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/pvactools/lib/pipeline.py", line 756, in execute
+    PostProcessor(**post_processing_params).execute()
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/pvactools/lib/post_processor.py", line 64, in execute
+    self.call_netmhc_stab()
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/pvactools/lib/post_processor.py", line 225, in call_netmhc_stab
+    NetMHCStab(self.net_chop_fh.name, self.netmhc_stab_fh.name, self.file_type, self.top_score_metric).execute()
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/pvactools/lib/netmhc_stab.py", line 37, in execute
+    alleles = self.valid_alleles(list(set(observed_alleles).intersection(set(mhci_alleles))))
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/pvactools/lib/netmhc_stab.py", line 195, in valid_alleles
+    response = self.query_netmhcstabpan_server(staging_file, 9, allele.replace("*", ""))
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/pvactools/lib/netmhc_stab.py", line 152, in query_netmhcstabpan_server
+    response = requests.post(
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/cindy2270/miniconda3/envs/web/lib/python3.9/site-packages/requests/adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='services.healthtech.dtu.dk', port=443): Max retries exceeded with url: /cgi-bin/webface2.cgi (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f0d41f016a0>: Failed to resolve 'services.healthtech.dtu.dk' ([Errno -2] Name or service not known)"))
