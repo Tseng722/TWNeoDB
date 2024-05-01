@@ -8,7 +8,7 @@
                 <h5>Prioritizing for TCR Immunogenicity</h5>
             </div>
             <div class="card-body">
-              <h4 class="card-title text-dark">Please enter yout email and continue</h4>
+              <h4 class="card-title text-dark">Please enter your email to proceed.</h4>
               {% csrf_token %}
                 <form id="emailForm" action='{% url "upload" %}' method="post">
                     <label for="email" style = "font-size: 22px;">Email : </label>

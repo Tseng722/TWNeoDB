@@ -8,6 +8,19 @@
 <div id="your-plotly-chart-container" >
     {{ graph_html|safe }}
 </div>
+<form action='{% url "test" %}' method="POST" name="annotationTextForm">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="annotationText"></textarea>
+      
+        <div class="row">
+            <div class="col" style="text-align: right;">
+                <p><input type="submit"  id="inputbut" value="Submit"/></p>
+            </div>
+        </div>
+    </div>
+</form>
 
 
 {% endblock %}

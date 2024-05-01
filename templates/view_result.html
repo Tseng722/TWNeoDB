@@ -7,7 +7,7 @@
         <h1>Priortizing score</h1>
         {% if job_status == 'SUCCESS' %}
             <div class="table-responsive">        
-                <table class="table table-bordered" style="white-space: nowrap;">
+                <table class="table table-bordered text-center" style="white-space: nowrap;">
                     <thead >
                         <tr class="table-secondary text-center">
                             <th colspan="3">Basic information</th>
@@ -24,9 +24,31 @@
                     <tbody>
                         {% for row in df_final.values %}
                             <tr>
-                                {% for cell in row %}
+                                <td>{{row.0}}</td>
+                                <td>{{row.1}}</td>
+                                <td>{{row.2}}</td>
+                                <td>{{row.3}}</td>
+                                <td>{{row.4}}</td>
+                                <td>
+                                    {% if row.5 != '' %}
+                                        <p class="text-center" data-toggle="tooltip" title="{{row.5}}">ⓘ</p>
+                                    {% endif %}
+                                </td>
+                                <td>{{row.6}}</td>
+                                <td>{{row.7}}</td>
+                                <td>{{row.8}}</td>
+                                <td>{{row.9}}</td>
+                                <td>{{row.10}}</td>
+                                <td>{{row.11}}</td>
+                                <td>{{row.12}}</td>
+                                <td>{{row.13}}</td>
+                                <td>{{row.14}}</td>
+                                <td>{{row.15}}</td>
+                                <td>{{row.16}}</td>
+                                
+                                <!-- {% for cell in row %}
                                     <td>{{cell}}</td>
-                                {% endfor %}
+                                {% endfor %} -->
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -36,10 +58,21 @@
                 <a class="btn btn-secondary me-md-2 " href="{% url 'download_prioritizing_result' job_uuid %}" role="button">Download</a>
             </div>
         {% elif job_status == 'WAITING' %}
-            <p>Yor task for priortizing score prediction was sucessfully submitted to our online system. Please kindly wait for a few times to receive a result.</p>
+            <p>Your task for prioritizing score prediction has been successfully submitted to our online system.</p> 
+            <p>Please be patient and allow some time to receive the results.</p>
             
         {% elif job_status == 'FAILED' %}
-            <p>Yor task went something wrong. Please upload your file again and check the format.</p>
+            <p>There seems to be an issue with your task submission. </p> 
+            <p>Please upload your file again and double-check the format.</p>
         {% endif %}
     </div>
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        });
+        //Apply Bootstrap tooltip style
+        $('[data-toggle="tooltip"]').tooltip({
+            trigger : 'hover'
+        });
+    </script>
 {% endblock %}
