@@ -71,6 +71,7 @@ def all_score(job_uuid):
     df_bigmhc = bigmhc(file_path,output)
     df_final = pd.merge(df_final,df_bigmhc,how='outer',left_on=['Peptide','HLA_Type'],right_on = ['pep','mhc'], indicator=True)
     df_final.drop(columns=['_merge','pep','mhc'], inplace=True)
+    df_final = df_final.rename(columns={'HLA_Type': 'HLA Type', 'IEDB_anno': 'Foreignness Anno','hydro_score':'Hydrophobicity','dissimilarity':'Dissimilarity','foreignness_score':'Foreignness Score','BigMHC_IM':'BigMHC Immunogenicity Prediction'})
     df_final.to_csv(file_path,index =False)
 
     user_job.objects.filter(uuid=job_uuid).update(status="SUCCESS",end_time = timezone.now())
