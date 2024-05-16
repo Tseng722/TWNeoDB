@@ -26,6 +26,7 @@ class Command(BaseCommand):
         RNA = options['RNA']
         df = pd.read_csv(csv_file)
         df = df.dropna(subset=['WT Epitope Seq'])
+        df = df.loc[~(df['Gene Symbol'].str.contains('IGHC|IGHJ|IGHD|IGHV|IGKV|IGKC|IGKJ|IGLJ|IGLV|IGLC', na=False))]
         df = df.reset_index(drop = True)
         o.write(f'\n ======================= SAVE INFO ========================== \n')
         o.write(f' ==== {csv_file} ===== \n')
@@ -85,7 +86,9 @@ class Command(BaseCommand):
                 dna_id_instance = mtsa_dna_transcript.objects.get(
                     chromosome = df.at[i,'Chromosome'],
                     start = df.at[i,'Start'],
-                    stop = df.at[i,'Stop']
+                    stop = df.at[i,'Stop'],
+                    reference = df.at[i,'Reference'],
+                    variant = df.at[i,'Variant']
                 )
                 is_patient_in = patient_transcript_score.objects.filter(dna_id = dna_id_instance,patient_id = patient_info_instance).exists()
                 if not is_patient_in:
@@ -95,7 +98,9 @@ class Command(BaseCommand):
                 dna_id_instance = mtsa_dna_transcript.objects.get(
                     chromosome = df.at[i,'Chromosome'],
                     start = df.at[i,'Start'],
-                    stop = df.at[i,'Stop']
+                    stop = df.at[i,'Stop'],
+                    reference = df.at[i,'Reference'],
+                    variant = df.at[i,'Variant']
                 )
                 if not patient_transcript_score.objects.filter(dna_id = dna_id_instance,patient_id = patient_info_instance).exists():
                     if RNA == False:
@@ -172,7 +177,9 @@ class Command(BaseCommand):
             mtsa_dna_transcript_instance = mtsa_dna_transcript.objects.get(
                     chromosome = df.at[i,'Chromosome'],
                     start = df.at[i,'Start'],
-                    stop = df.at[i,'Stop']
+                    stop = df.at[i,'Stop'],
+                    reference = df.at[i,'Reference'],
+                    variant = df.at[i,'Variant']
                 )
             mutant_peptide_instance = mutant_peptide.objects.get(
                 tumor_protein = df.at[i,'MT Epitope Seq'],
@@ -202,6 +209,7 @@ class Command(BaseCommand):
 
         o.write(f' ========================== END ============================= \n')
         print('success')
+        print('mTSA DNA')
         print(f' {sample_from} ')
         print(f' {tumor_type} ')
         print(f' {patient_number} ')

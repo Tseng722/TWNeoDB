@@ -25,7 +25,9 @@ class Command(BaseCommand):
         tumor_type = options['tumor_type']
         patient_number = options['patient_number']
         df = pd.read_csv(csv_file)
-
+        df = df.loc[~(df['gene_symbol'].str.contains('IGHC|IGHJ|IGHD|IGHV|IGKV|IGKC|IGKJ|IGLJ|IGLV|IGLC', na=False))]
+        df = df.reset_index(drop=True)
+        
         o.write(f'\n ======================= SAVE INFO ========================== \n')
         o.write(f' ==== {csv_file} ===== \n')
         o.write(f' ==== {sample_from} ===== \n')
@@ -197,6 +199,7 @@ class Command(BaseCommand):
 
         o.write(f' ========================== END ============================= \n')
         print('success')
+        print('mTSA RNA')
         print(f' {sample_from} ')
         print(f' {tumor_type} ')
         print(f' {patient_number} ')
