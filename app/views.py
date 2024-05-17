@@ -83,6 +83,11 @@ def search(request):
         mess = "FAIL"
     return render(request, "search_test.html",locals())
 
+def about(request):
+    
+    return render(request, "about.html",locals())
+
+
 def sort(request , mode=None):
     if mode =='tumor_sort':
         try:
