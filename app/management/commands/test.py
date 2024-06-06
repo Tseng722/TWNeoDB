@@ -1,5 +1,5 @@
 from app.models import mtsa_dna_transcript,mtsa_rna_transcript,patient_info,peptide_selection_score,mutant_peptide,patient_transcript_score,mtsa_dna_transcript_mutant_mapping,mtsa_rna_transcript_mutant_mapping,aetsa_transcript
-from app.models import shared_pep_mtsa_rna,shared_pep_mtsa_dna,shared_pep_aetsa,hla_in_patient
+from app.models import shared_pep_mtsa_rna,shared_pep_mtsa_dna,shared_pep_aetsa,hla_in_patient,aetsa_transcript_mutant_mapping
 from django.forms.models import model_to_dict
 from django.core.management.base import BaseCommand
 from django.db.models import Count
@@ -184,11 +184,16 @@ class Command(BaseCommand):
         # print(df_mtsa_rna)
         #=============================
         #ig gene
-        data = mtsa_rna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_rna_transcript_id').values("mutant_peptide_id__tumor_protein","mtsa_rna_transcript_id__gene_symbol").filter(mtsa_rna_transcript_id__gene_symbol__icontains='IGKV')
-        df = read_frame(data)
+        # data = mtsa_rna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_rna_transcript_id').values("mutant_peptide_id__tumor_protein","mtsa_rna_transcript_id__gene_symbol").filter(mtsa_rna_transcript_id__gene_symbol__icontains='IGKV')
+        # df = read_frame(data)
         # df2 = df.groupby(["mutant_peptide_id__tumor_protein","mtsa_rna_transcript_id__gene_symbol"]).size().reset_index(name="Counts")
-        print(len(df))
-        print(df)
+        # print(len(df))
+        # print(df)
+
+        # ===========================
+        aetsa_all = aetsa_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('aetsa_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = 'HHARLILYF',mutant_peptide_id__hla_type__icontains = 'HLA-A*24:02', aetsa_transcript_id__gene_symbol__icontains = 'nan')
+        for i in aetsa_all :
+            print(i.aetsa_transcript_id.gene_symbol)
 
         
 
