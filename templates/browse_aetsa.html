@@ -48,10 +48,14 @@
                 <tr class='clickable-row' data-href='url:/#' id="table_border_color">
                             
                     <td ></td>
-                    <td ><a  href='{% url "detail_page_aetsa" i.id %}'>{{ forloop.counter }}</a></td>
+                    <td ><a  href='{% url "detail_page_aetsa" i.id %}' target="_blank">{{ forloop.counter }}</a></td>
                     <td >{{i.mutant_peptide_id.tumor_protein}}</td>
                     <td >{{i.tumor_type}}</td>
-                    <td >{{i.aetsa_transcript_id.gene_symbol}}</td>
+                    {% if i.aetsa_transcript_id.gene_symbol == 'nan' %}
+                        <td ></td>
+                    {% else %}
+                        <td >{{i.aetsa_transcript_id.gene_symbol}}</td>
+                    {% endif %}
                     <td >{{i.aetsa_transcript_id.cdna_location}}</td>
                     <td >{{i.aetsa_transcript_id.gene_element}}</td>
                     <td >{{i.mutant_peptide_id.hla_type}}</td>
