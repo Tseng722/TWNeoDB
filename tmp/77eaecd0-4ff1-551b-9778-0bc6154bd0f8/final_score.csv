@@ -1,7 +1,0 @@
-Peptide,HLA Type,In TWNeoDB,Length,IC50,Percentile,Hydrophobicity,Predicted Stability,Half Life,Stability Rank,cterm_7mer_gravy_score,max_7mer_gravy_score,Best Cleavage Position,Best Cleavage Score,Dissimilarity,Foreignness Score,Foreignness Anno,IEDB Qualitative,BigMHC Immunogenicity Prediction
-TLFLQMNSL,HLA-A*02:01,No,9,127.695,0.94,0.156,0.341,0.64,7.0,0.643,0.657,9.0,0.969,0.0,,,,0.30234066
-LYNTVATLY,HLA-A*02:03,No,9,29195.93,55.5,1.49,0.002,0.11,49.0,0.514,0.514,8.0,0.978,0.999935573296226,1.0,127002|gag protein|AAV53342.1|Human immunodeficiency virus 1|11676 LYNTVATLY|126491|gag protein|AAV53216.1|Human immunodeficiency virus 1|11676 LYNTVATLY|190980|gag protein|AAV53216.1|Human immunodeficiency virus 1|11676 LYNTVATLY,Positive : 1 ; Negative : 0,0.10752755
-YSDLHAFYY,HLA-A*01:01,No,9,1.97,0.01,0.239,0.853,4.36,0.01,-0.129,-0.057,8.0,0.973,0.0,,,Positive : 9 ; Negative : 0,0.7398602
-FSDYYDLSY,HLA-A*01:01,No,9,2.12,0.01,-0.895,0.692,1.88,0.1,-1.129,-0.543,5.0,0.969,0.0,0.5,17574|Gag-Pol polyprotein|P05961.3|Human immunodeficiency virus 1|11676 FRDYVDRFY,,0.2637815
-AVQRTLLEK,HLA-A*11:01,Yes,9,15.065,0.06,-0.5578843196526257,0.965,19.59,0.06,-1.2142857142857142,0.7,7.0,0.97244,0.0,,,Positive : 68 ; Negative : 0,0.18690939
-KITDFGRAK,HLA-A*11:01,Yes,9,131.995,0.685,-1.337763741730667,0.875,5.2,0.4,-1.2,-3.172065784643304e-17,5.0,0.875198,5.55111512312578e-16,,,Positive : 3 ; Negative : 0,0.10983115

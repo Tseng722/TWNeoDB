@@ -1,3 +1,0 @@
-Peptide,HLA_Type,Length,th,IC50,Percentile,Best Cleavage Position,Best Cleavage Score,Predicted Stability,Half Life,Stability Rank,hydro_score,cterm_7mer_gravy_score,max_7mer_gravy_score,dissimilarity,foreignness_score,IEDB_anno
-AVQRTLLEK,HLA-A*11:01,9,AVQRTLLEK_HLA-A*11:01,15.065,0.06,7.0,0.97244,0.965,19.59,0.06,-0.5578843196526257,-1.2142857142857142,0.7,0.0,,
-KITDFGRAK,HLA-A*11:01,9,KITDFGRAK_HLA-A*11:01,131.995,0.685,5.0,0.875198,0.875,5.2,0.4,-1.337763741730667,-1.2,-3.1720657846433036e-17,5.55111512312578e-16,,
