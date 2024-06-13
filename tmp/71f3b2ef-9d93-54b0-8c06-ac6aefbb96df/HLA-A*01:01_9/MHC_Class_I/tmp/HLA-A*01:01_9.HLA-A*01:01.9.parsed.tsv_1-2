@@ -1,3 +1,0 @@
-Mutation	HLA Allele	Sub-peptide Position	Epitope Seq	Median IC50 Score	Best IC50 Score	Best IC50 Score Method	Median Percentile	Best Percentile	Best Percentile Method	NetMHC IC50 Score	NetMHC Percentile	NetMHCpan IC50 Score	NetMHCpan Percentile
-YSDLHAFYY_HLA-A*01:01_	HLA-A*01:01	1	YSDLHAFYY	1.97	1.86	NetMHC	0.01	0.01	NetMHC	1.86	0.01	2.08	0.01
-FSDYYDLSY_HLA-A*01:01_	HLA-A*01:01	1	FSDYYDLSY	2.12	1.89	NetMHC	0.01	0.01	NetMHC	1.89	0.01	2.35	0.01

@@ -1,1 +1,0 @@
-WARNING:urllib3.connectionpool:Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7fddc7d21af0>: Failed to resolve 'services.healthtech.dtu.dk' ([Errno -2] Name or service not known)")': /cgi-bin/webface2.cgi

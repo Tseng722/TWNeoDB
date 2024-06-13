@@ -1,3 +1,0 @@
-Peptide,HLA_Type,Length,th,hydro_score,Best IC50 Score,Best Percentile,cterm_7mer_gravy_score,max_7mer_gravy_score,Best Cleavage Position,Best Cleavage Score,Predicted Stability,Half Life,Stability Rank,foreignness_score,IEDB_anno,dissimilarity
-YSDLHAFYY,HLA-A*01:01,9,YSDLHAFYY_HLA-A*01:01,0.239,1.86,0.01,-0.129,-0.057,8,0.973,0.853,4.36,0.01,,,0
-FSDYYDLSY,HLA-A*01:01,9,FSDYYDLSY_HLA-A*01:01,-0.895,1.89,0.01,-1.129,-0.543,5,0.969,0.692,1.88,0.1,0.5,17574|Gag-Pol polyprotein|P05961.3|Human immunodeficiency virus 1|11676 FRDYVDRFY,0

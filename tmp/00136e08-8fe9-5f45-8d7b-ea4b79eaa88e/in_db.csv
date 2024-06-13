@@ -1,3 +1,0 @@
-Peptide,HLA_Type,Length,th,IC50 Score,Percentile,Best Cleavage Position,Best Cleavage Score	,Predicted Stability,Half Life,stability_rank
-GLSSRAVAL,HLA-A*02:01,9,GLSSRAVAL_HLA-A*02:01,306.715,1.9,9.0,0.953573,0.452,0.87,5.0
-LLAHVHYTV,HLA-A*02:01,9,LLAHVHYTV_HLA-A*02:01,6.71,0.05,9.0,0.966648,0.957,15.77,0.06

@@ -1,2 +1,0 @@
-Mutation	HLA Allele	Sub-peptide Position	Epitope Seq	Median IC50 Score	Best IC50 Score	Best IC50 Score Method	Median Percentile	Best Percentile	Best Percentile Method	NetMHC IC50 Score	NetMHC Percentile	NetMHCpan IC50 Score	NetMHCpan Percentile
-FLDLPWVDVL_HLA-A*02:01_	HLA-A*02:01	1	FLDLPWVDVL	26.845	18.28	NetMHCpan	0.245	0.17	NetMHCpan	35.41	0.32	18.28	0.17

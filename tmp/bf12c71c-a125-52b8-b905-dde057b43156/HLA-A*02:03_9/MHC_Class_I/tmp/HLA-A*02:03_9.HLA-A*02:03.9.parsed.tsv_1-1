@@ -1,2 +1,0 @@
-Mutation	HLA Allele	Sub-peptide Position	Epitope Seq	Median IC50 Score	Best IC50 Score	Best IC50 Score Method	Median Percentile	Best Percentile	Best Percentile Method	NetMHC IC50 Score	NetMHC Percentile	NetMHCpan IC50 Score	NetMHCpan Percentile
-LYNTVATLY_HLA-A*02:03_	HLA-A*02:03	1	LYNTVATLY	29195.93	28622.34	NetMHC	55.5	54.0	NetMHCpan	28622.34	57.0	29769.52	54.0

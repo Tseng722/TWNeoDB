@@ -1,0 +1,2 @@
+Mutation	HLA Allele	Sub-peptide Position	Epitope Seq	Median IC50 Score	Best IC50 Score	Best IC50 Score Method	Median Percentile	Best Percentile	Best Percentile Method	NetMHC IC50 Score	NetMHC Percentile	NetMHCpan IC50 Score	NetMHCpan Percentile
+TLFLQMNSL_HLA-A*02:01_	HLA-A*02:01	1	TLFLQMNSL	127.695	115.82	NetMHC	0.94	0.93	NetMHC	115.82	0.93	139.57	0.95
