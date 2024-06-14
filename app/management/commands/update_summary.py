@@ -107,6 +107,7 @@ class Command(BaseCommand):
         queryset = patient_info.objects.values("tumor_type").annotate(count=Count('id',distinct=True))
         df_patient_info = read_frame(queryset)
         fig_patient = px.pie(df_patient_info, values='count', names='tumor_type',color_discrete_sequence=px.colors.qualitative.Pastel)
+        fig_patient.update_traces(textinfo='percent+label+value', textfont_size=14)
         graph_html_patient_info = plot(fig_patient, output_type='div')
         with open(OUT_HTML_DIR+'/graph_patient_info.html', 'w') as file:
             file.write(graph_html_patient_info)
