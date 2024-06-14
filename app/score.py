@@ -12,7 +12,7 @@ from app.models import aetsa_transcript_mutant_mapping,patient_aetsa_score,aetsa
 from app.models import shared_pep_mtsa_rna,shared_pep_mtsa_dna,shared_pep_aetsa
 
 
-OUT_FILE_DIR= settings.OUTPUT_BASE_DIR
+OUT_FILE_DIR = settings.OUTPUT_BASE_DIR
 
 def _is_path_exist(dir, error_msg=False):
     if dir == None: return False
@@ -234,3 +234,29 @@ def bigmhc(file_path,output_dir):
     df_bigmhc = pd.read_csv(output_file)
     df_bigmhc.drop(columns=['tgt','len'], inplace=True)
     return df_bigmhc
+
+def deepHLApan(df_in,job_uuid,output):
+    container_id = "deephla"
+    df = df_in
+    df['Annotation'] = df['HLA_Type']
+    df['HLA'] = df['HLA_Type'].str.replace('*','')
+    df['peptide'] = df['Peptide']
+    exclude_hla = ['HLA-B30:02', 'HLA-A33:02', 'HLA-A35:01', 'HLA-A51:01', 'HLA-B07:01']
+    for hla in exclude_hla:
+        df = df.loc[~df['HLA'].str.contains(hla, na=False)]
+    output_csv = output+f'/deepHLApan_{job_uuid}.csv'
+    df[['Annotation','HLA','peptide']].to_csv(output_csv,index=False)
+
+    command = f"docker cp {output_csv} {container_id}:/root/local179/deepHLApan_{job_uuid}.csv"
+    subprocess.run(command, shell=True, check=True)
+    command = 'docker start deephla'
+    subprocess.run(command, shell=True, check=True)
+    command = f'docker exec deephla deephlapan -F /root/local179/deepHLApan_{job_uuid}.csv -O /root/local179/'
+    subprocess.run(command, shell=True, check=True)
+
+    df_dhp = pd.read_csv(f'/work1791/cindy2270/docker_f/deepHLApan_{job_uuid}_predicted_result.csv')
+    # df_dhp = df_dhp.rename(columns={'HLA':'HLA_Type'})
+    df_dhp.drop(columns='HLA',inplace=True)
+    
+    return df_dhp
+    
