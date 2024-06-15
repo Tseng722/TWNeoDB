@@ -9,7 +9,7 @@ from django.conf import settings
 
 from app.score import pvac,hydro,similarity,is_pep_in_db
 from app.ip import get_location
-from app.task import is_path_exist, all_score,test,send_email
+from app.task import is_path_exist, all_score,test,send_email,detect_delimiter
 from django_q.tasks import async_task
 from django_q.tasks import result
 from django.db.models import Count,Avg
@@ -505,7 +505,8 @@ def upload_result(request):
             #read upload file
             file_content = uploaded_file.read()
             data_str = file_content.decode('utf-8')
-            df = pd.read_csv(io.StringIO(data_str), sep=' ', header=None, names=['Peptide', 'HLA_Type'])
+            delimiter = detect_delimiter(data_str)
+            df = pd.read_csv(io.StringIO(data_str), sep=delimiter, header=None, names=['Peptide', 'HLA_Type'])
             df['Length'] = df['Peptide'].str.len()
             df.to_csv(output+ f'/{job_uuid}.csv',index=False)
 

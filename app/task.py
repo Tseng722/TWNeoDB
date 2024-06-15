@@ -103,3 +103,23 @@ def check_task_status(request, task_id):
         return HttpResponse(f'Task completed! Result: {task_result.result}')
     else:
         return HttpResponse('Task is still running or failed...')
+
+def detect_delimiter(file_content):
+    try:
+        df_comma = pd.read_csv(io.StringIO(file_content), sep=',', header=None, nrows=1)
+        if len(df_comma.columns) > 1:
+            return ','
+    except Exception:
+        pass
+    try:
+        df_tab = pd.read_csv(io.StringIO(file_content), sep='\t', header=None, nrows=1)
+        if len(df_tab.columns) > 1:
+            return '\t'
+    except Exception:
+        pass
+    try:
+        df_comma = pd.read_csv(io.StringIO(file_content), sep=' ', header=None, nrows=1)
+        if len(df_comma.columns) > 1:
+            return ' '
+    except Exception:
+        pass
