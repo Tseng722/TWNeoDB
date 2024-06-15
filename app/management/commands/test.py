@@ -191,14 +191,14 @@ class Command(BaseCommand):
         # print(df)
 
         # ===========================
-        aetsa_all = aetsa_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('aetsa_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = 'HHARLILYF',mutant_peptide_id__hla_type__icontains = 'HLA-A*24:02', aetsa_transcript_id__gene_symbol__icontains = 'nan')
-        for i in aetsa_all :
-            print(i.aetsa_transcript_id.gene_symbol)
+        # aetsa_all = aetsa_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('aetsa_transcript_id').filter(mutant_peptide_id__tumor_protein__icontains = 'HHARLILYF',mutant_peptide_id__hla_type__icontains = 'HLA-A*24:02', aetsa_transcript_id__gene_symbol__icontains = 'nan')
+        # for i in aetsa_all :
+        #     print(i.aetsa_transcript_id.gene_symbol)
 
         
-
-
-
+        dna_patient = shared_pep_mtsa_rna.objects.values('tumor_type','patient_id').annotate(count=Count('patient_id'))
+        df = read_frame(dna_patient)
+        print(df)
         
 
         

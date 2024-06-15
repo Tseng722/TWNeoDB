@@ -1,4 +1,4 @@
-hla_type,tumor_type,patients
+HLA-A type,Tumor type,patients
 HLA-A*11:01,colon,55
 HLA-A*11:01,oral,42
 HLA-A*02:07,colon,31

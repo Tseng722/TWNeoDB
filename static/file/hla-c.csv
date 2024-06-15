@@ -1,4 +1,4 @@
-hla_type,tumor_type,patients
+HLA-C type,Tumor type,patients
 HLA-C*01:02,colon,47
 HLA-C*07:02,colon,43
 HLA-C*01:02,oral,32

@@ -21,11 +21,18 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         colors = ['rgb(0, 0, 100)', 'rgb(0, 200, 200)']
+        color_map = {
+            "liver": "rgb(135, 197, 95)",
+            "oral": "rgb(246, 207, 113)",
+            "colon": "rgb(102, 197, 204)",
+            "breast": "rgb(248, 156, 116)",
+            "lung": "rgb(180, 151, 231)"
+        }
         queryset = hla_in_patient.objects.all()
         df = read_frame(queryset)
         df_a = df.loc[df['class_type']=='A']
         df_a = df_a.groupby(["hla_type","tumor_type"]).size().reset_index(name="patients").sort_values(by='patients', ascending=False)
-        
+        df_a = df_a.rename(columns={'tumor_type':'Tumor type','hla_type':'HLA-A type'})
         # df_a['hla_type'] = df_a.apply(lambda x: 'Other' if x['patients'] <= 1 else x['hla_type'], axis=1)
         # df_a.reset_index(drop=True, inplace=True)
         # df_other = df_a.loc[df_a['hla_type']=='Other']
@@ -35,13 +42,14 @@ class Command(BaseCommand):
         df_a.to_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/hla-a.csv',index = False)
         
 
-        fig_hla_a = px.bar(df_a, x="hla_type", y="patients", color="tumor_type", title="HLA-A type",color_discrete_sequence=px.colors.qualitative.Pastel)
+        fig_hla_a = px.bar(df_a, x="HLA-A type", y="patients", color="Tumor type", title="HLA-A type",color_discrete_map=color_map,color_discrete_sequence=px.colors.qualitative.Pastel)
         graph_html_hla_a = plot(fig_hla_a, output_type='div')
         with open(OUT_HTML_DIR+'/graph_hla_a.html', 'w') as file:
             file.write(graph_html_hla_a)
         print('hla_a')
         df_b = df.loc[df['class_type']=='B']
         df_b = df_b.groupby(["hla_type","tumor_type"]).size().reset_index(name="patients").sort_values(by='patients', ascending=False)
+        df_b = df_b.rename(columns={'tumor_type':'Tumor type','hla_type':'HLA-B type'})
         # df_b['hla_type'] = df_b.apply(lambda x: 'Other' if x['patients'] <= 4 else x['hla_type'], axis=1)
         # df_b.reset_index(drop=True, inplace=True)
         # df_other = df_b.loc[df_b['hla_type']=='Other']
@@ -50,7 +58,7 @@ class Command(BaseCommand):
         # df_b = pd.concat([df_b,df_other])
 
         df_b.to_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/hla-b.csv',index = False)
-        fig_hla_b = px.bar(df_b, x="hla_type", y="patients", color="tumor_type", title="HLA-B type",color_discrete_sequence=px.colors.qualitative.Pastel)
+        fig_hla_b = px.bar(df_b, x="HLA-B type", y="patients", color="Tumor type", title="HLA-B type",color_discrete_map=color_map,color_discrete_sequence=px.colors.qualitative.Pastel)
         graph_html_hla_b = plot(fig_hla_b, output_type='div')
         with open(OUT_HTML_DIR+'/graph_hla_b.html', 'w') as file:
             file.write(graph_html_hla_b)
@@ -58,7 +66,7 @@ class Command(BaseCommand):
 
         df_c = df.loc[df['class_type']=='C']
         df_c = df_c.groupby(["hla_type","tumor_type"]).size().reset_index(name="patients").sort_values(by='patients', ascending=False)
-        
+        df_c = df_c.rename(columns={'tumor_type':'Tumor type','hla_type':'HLA-C type'})
         # df_c['hla_type'] = df_c.apply(lambda x: 'Other' if x['patients'] <= 4 else x['hla_type'], axis=1)
         # df_c.reset_index(drop=True, inplace=True)
         # df_other = df_c.loc[df_c['hla_type']=='Other']
@@ -67,7 +75,7 @@ class Command(BaseCommand):
         # df_c = pd.concat([df_c,df_other])
 
         df_c.to_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/hla-c.csv',index = False)
-        fig_hla_c = px.bar(df_c, x="hla_type", y="patients", color="tumor_type", title="HLA-C type",color_discrete_sequence=px.colors.qualitative.Pastel)
+        fig_hla_c = px.bar(df_c, x="HLA-C type", y="patients", color="Tumor type", title="HLA-C type",color_discrete_map=color_map,color_discrete_sequence=px.colors.qualitative.Pastel)
         graph_html_hla_c = plot(fig_hla_c, output_type='div')
         with open(OUT_HTML_DIR+'/graph_hla_c.html', 'w') as file:
             file.write(graph_html_hla_c)
@@ -79,12 +87,12 @@ class Command(BaseCommand):
         data = shared_pep_mtsa_rna.objects.select_related('mutant_peptide_id').values("patient_id","mutant_peptide_id__tumor_protein","tumor_type").distinct()
         mtsa_rna = data.values("mutant_peptide_id__tumor_protein","tumor_type").annotate(count=Count('patient_id',distinct=True))
         df_mtsa_rna = read_frame(mtsa_rna.filter(count__gt=1))
-        df_mtsa_rna['tsa type'] = 'mTSA(RNA)'
+        df_mtsa_rna['tsa type'] = 'mTSA-RNA'
 
         data = shared_pep_mtsa_dna.objects.values("patient_id","mutant_peptide_id__tumor_protein","tumor_type").distinct()
         mtsa_dna = data.values("mutant_peptide_id__tumor_protein","tumor_type").annotate(count=Count('patient_id',distinct=True))
         df_mtsa_dna = read_frame(mtsa_dna.filter(count__gt=1))
-        df_mtsa_dna['tsa type'] = 'mTSA(DNA)'
+        df_mtsa_dna['tsa type'] = 'mTSA-DNA'
 
         data = shared_pep_aetsa.objects.values("patient_id","mutant_peptide_id__tumor_protein","tumor_type").distinct()
         aetsa = data.values("mutant_peptide_id__tumor_protein","tumor_type").annotate(count=Count('patient_id',distinct=True))
@@ -92,21 +100,25 @@ class Command(BaseCommand):
         df_aetsa['tsa type'] = 'aeTSA'
 
         df = pd.concat([df_mtsa_rna,df_mtsa_dna,df_aetsa])
+        df['mutant_peptide_id__tumor_protein'] = df['mutant_peptide_id__tumor_protein'] + "   (" + df['tsa type'].astype(str) + ")"
+
         df = df.rename(columns={'count':'peptides shared with patients'})
         df.to_csv('/work1791/cindy2270/web/web_v1/webV1/static/file/shared_peptide.csv',index = False)
         df = df.sort_values(by='peptides shared with patients', ascending=False)
         df = df.loc[(df['peptides shared with patients']>2)]
         # df["TWNeo peptide"] = df["mutant_peptide_id"].apply(lambda x: "TWPEP_" + str(x))
-        df = df.rename(columns={'mutant_peptide_id__tumor_protein':'TWNeo peptide'})
+        df = df.rename(columns={'mutant_peptide_id__tumor_protein':'TWNeo peptide','tumor_type':'Tumor type'})
         
-        fig = px.bar(df, x="TWNeo peptide",y= 'peptides shared with patients',color="tumor_type",color_discrete_sequence=px.colors.qualitative.Pastel)
+        fig = px.bar(df, x="TWNeo peptide",y= 'peptides shared with patients',color="Tumor type",color_discrete_map=color_map,color_discrete_sequence=px.colors.qualitative.Pastel)
         graph_html_shared_pep = plot(fig, output_type='div')
         with open(OUT_HTML_DIR+'/graph_shared_pep.html', 'w') as file:
             file.write(graph_html_shared_pep)
         print('shared_pep')
         queryset = patient_info.objects.values("tumor_type").annotate(count=Count('id',distinct=True))
         df_patient_info = read_frame(queryset)
-        fig_patient = px.pie(df_patient_info, values='count', names='tumor_type',color_discrete_sequence=px.colors.qualitative.Pastel)
+        df_patient_info = df_patient_info.rename(columns={'count':'patients','tumor_type':'Tumor type'})
+        
+        fig_patient = px.pie(df_patient_info, values='patients', names='Tumor type',color_discrete_map=color_map,color_discrete_sequence=px.colors.qualitative.Pastel)
         fig_patient.update_traces(textinfo='percent+label+value', textfont_size=14)
         graph_html_patient_info = plot(fig_patient, output_type='div')
         with open(OUT_HTML_DIR+'/graph_patient_info.html', 'w') as file:

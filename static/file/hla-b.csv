@@ -1,4 +1,4 @@
-hla_type,tumor_type,patients
+HLA-B type,Tumor type,patients
 HLA-B*46:01,colon,37
 HLA-B*40:01,colon,33
 HLA-B*40:01,breast,25
