@@ -323,6 +323,9 @@ class user_info(models.Model):
     ip=models.CharField(max_length=25,null=True)
     country=models.CharField(max_length=50,null=True)
     enroll_time = models.DateTimeField(auto_now_add=True,null=True)
+    mail_uuid = models.CharField(max_length=100,unique=True,null=True)
+    is_activate = models.IntegerField(null=False,default=0)
+    activate_time = models.DateTimeField(null=True)
     def __str__(self):
         return str(self.id)
     class Meta:
@@ -331,7 +334,7 @@ class user_info(models.Model):
 
 class user_job(models.Model):
     id = models.AutoField(primary_key=True)
-    uuid = models.CharField(max_length=64,unique=True)
+    uuid = models.CharField(max_length=100,unique=True)
     start_time = models.DateTimeField(auto_now_add=True,null=True)
     end_time = models.DateTimeField(null=True)
     status = models.CharField(max_length=10,default='WAITING')
@@ -716,4 +719,3 @@ class shared_pep_aetsa(models.Model):
         managed = True
         unique_together = [('patient_id','aetsa_id','mutant_peptide_id')]
         db_table = 'shared_pep_aetsa'
-   

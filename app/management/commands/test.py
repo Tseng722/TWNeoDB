@@ -1,5 +1,5 @@
 from app.models import mtsa_dna_transcript,mtsa_rna_transcript,patient_info,peptide_selection_score,mutant_peptide,patient_transcript_score,mtsa_dna_transcript_mutant_mapping,mtsa_rna_transcript_mutant_mapping,aetsa_transcript
-from app.models import shared_pep_mtsa_rna,shared_pep_mtsa_dna,shared_pep_aetsa,hla_in_patient,aetsa_transcript_mutant_mapping
+from app.models import shared_pep_mtsa_rna,shared_pep_mtsa_dna,shared_pep_aetsa,hla_in_patient,aetsa_transcript_mutant_mapping,user_info,user_job
 from django.forms.models import model_to_dict
 from django.core.management.base import BaseCommand
 from django.db.models import Count
@@ -195,10 +195,16 @@ class Command(BaseCommand):
         # for i in aetsa_all :
         #     print(i.aetsa_transcript_id.gene_symbol)
 
-        
-        dna_patient = shared_pep_mtsa_rna.objects.values('tumor_type','patient_id').annotate(count=Count('patient_id'))
-        df = read_frame(dna_patient)
-        print(df)
+        # ======================  計算病人數量
+        # dna_patient = shared_pep_mtsa_rna.objects.values('tumor_type','patient_id').annotate(count=Count('patient_id'))
+        # df = read_frame(dna_patient)
+        # print(df)
+
+        # =========================   刪除table
+        # user_info.objects.all().delete()
+        user_job_ins = user_job.objects.all()
+        for i in user_job_ins:
+            print(i.start_time,i.end_time)
         
 
         

@@ -29,15 +29,23 @@ def is_path_exist(dir, error_msg=False):
         makedirs(dir)
         return True
 
-def send_email(job_uuid,status):
+def send_email(uuid,status):
     subject = 'TWNeoDB'
     if status=='SUCCESS':
-        url = f'{web_url}/view_result/{job_uuid}'
+        url = f'{web_url}/view_result/{uuid}'
         message = f'Hello,\n\nYor task for predicted data completed, please click this link :{url}  \n\nBest wishes,\nTWNeoDB team'
+        user_job_instance  = user_job.objects.select_related('user').get(uuid=uuid)
+        recipient_list = [user_job_instance.user.mail]
     elif status=='FAILED':
         message = f'Hello,\n\nYour task for the predicted data has failed. Please re-upload and check your file, or you can contact us via email.  \n\nBest wishes,\nTWNeoDB team'
-    user_job_instance  = user_job.objects.select_related('user').get(uuid=job_uuid)
-    recipient_list = [user_job_instance.user.mail]
+        user_job_instance  = user_job.objects.select_related('user').get(uuid=uuid)
+        recipient_list = [user_job_instance.user.mail]
+    elif status=='ACTIVATE_MAIL':
+        url = f'{web_url}/activate_mail/{uuid}'
+        message = f'Hello,\n\nPlease click the link to acitvate your email and upload file:\n\n {url} \n\nBest wishes,\nTWNeoDB team'
+        user_instance = user_info.objects.get(mail_uuid=uuid)
+        recipient_list = [user_instance.mail]
+    
     send_mail(subject, message, from_email, recipient_list)
     return
 

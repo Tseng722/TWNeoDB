@@ -41,7 +41,7 @@ from ipware import get_client_ip
 from geolite2 import geolite2
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
-
+from django.utils import timezone
 import plotly.graph_objects as go
 from django.shortcuts import render
 from plotly.offline import plot
@@ -465,7 +465,7 @@ def upload(request):
     
     # print(country)
     mail = request.POST['email']
-    
+    mail_uuid = uuid.uuid5(uuid.NAMESPACE_DNS, mail)
     try:
         user_id = user_info.objects.get(mail=mail).id
     except:
@@ -476,9 +476,14 @@ def upload(request):
         # print(ip_address,country)
         user_info.objects.create(
                             ip=ip_address,mail=mail,
-                            country=country)
-        user_id = user_info.objects.get(mail=mail).id       
+                            country=country,
+                            mail_uuid=mail_uuid)
+        user_id = user_info.objects.get(mail=mail).id      
+    user_info_instance = user_info.objects.get(mail=mail)
     request.session['user_id'] = user_id
+    if user_info_instance.is_activate==0:
+        send_email(mail_uuid,'ACTIVATE_MAIL')
+        return render(request,"wait_activate_mail.html",locals())
     
 
     return render(request,"upload.html",locals())
@@ -540,6 +545,14 @@ def view_result(request,job_uuid):
 def user_info_job(request):
     return render(request, 'user_info_job.html',locals())
 
+def activate_mail(request,mail_uuid):
+    user_instance = user_info.objects.get(mail_uuid=mail_uuid)
+    user_instance.is_activate = 1
+    user_instance.activate_time = timezone.now()
+    user_instance.save()
+    request.session['user_id'] = user_instance.id
+    return render(request,"upload.html",locals())
+
 def summary(request):
     # queryset = hla_in_patient.objects.all()
     # df = read_frame(queryset)
@@ -590,7 +603,7 @@ def summary(request):
 
 
 
-def send_email(request):
+# def send_email(request):
     # subject = 'TWNeoDB'
     # message = 'Your predicted data finished, please click this link : uuuuu'
     # from_email = 'cindy2270@gmail.com'
@@ -600,7 +613,7 @@ def send_email(request):
 
     # send_mail(subject, message, from_email, recipient_list)
 
-    return render(request, 'test1.html',locals())
+    # return render(request, 'test1.html',locals())
 
 def get_data(request):
     # data = mtsa_pmhc_patient_mapping.objects.select_related('tnh').select_related('vaa_p').select_related('transcript_id').all().values()

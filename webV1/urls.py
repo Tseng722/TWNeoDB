@@ -45,6 +45,7 @@ urlpatterns = [
     path('view_result/<str:job_uuid>', views.view_result,name='view_result'),
     path('view_result/download_result/<str:job_uuid>', views.download_prioritizing_result,name='download_prioritizing_result'),
     
+    path('activate_mail/<str:mail_uuid>', views.activate_mail,name='activate_mail'),
     path('user_info_job', views.user_info_job,name='user_info_job'),
     path('summary', views.summary,name='summary'),
 
