@@ -340,6 +340,7 @@ class user_job(models.Model):
     status = models.CharField(max_length=10,default='WAITING')
     # task_id = models.CharField(max_length=100,default='WAITING',null=True)
     user=models.ForeignKey(user_info,null=True,on_delete=models.CASCADE)
+    pep_count = models.IntegerField(null=True)
 
     def __str__(self):
         return str(self.id)

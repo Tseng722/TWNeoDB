@@ -501,9 +501,7 @@ def upload_result(request):
             print(uuid_from_datetime)
             job_uuid = str(uuid_from_datetime)
             user_info_instance = user_info.objects.get(pk=user_id)
-            user_job.objects.create(
-                uuid =job_uuid,
-                user =  user_info_instance)
+            
             output = OUT_FILE_DIR + job_uuid 
             is_output_exist = is_path_exist(output)  
             
@@ -513,7 +511,12 @@ def upload_result(request):
             delimiter = detect_delimiter(data_str)
             df = pd.read_csv(io.StringIO(data_str), sep=delimiter, header=None, names=['Peptide', 'HLA_Type'])
             df['Length'] = df['Peptide'].str.len()
-            df.to_csv(output+ f'/{job_uuid}.csv',index=False)
+            df.to_csv(output+ f'/original_{job_uuid}.csv',index=False)
+            pep_count = len(df)
+            user_job.objects.create(
+                uuid =job_uuid,
+                user =  user_info_instance,
+                pep_count = pep_count)
 
             
             task_id  = async_task("app.task.all_score",job_uuid = job_uuid)

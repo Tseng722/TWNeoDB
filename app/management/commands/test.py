@@ -201,10 +201,11 @@ class Command(BaseCommand):
         # print(df)
 
         # =========================   刪除table
-        # user_info.objects.all().delete()
-        user_job_ins = user_job.objects.all()
+        # user_job.objects.all().delete()
+        user_job_ins = user_job.objects.filter(status='SUCCESS')
         for i in user_job_ins:
-            print(i.start_time,i.end_time)
+            print(i.pep_count,str(i.end_time-i.start_time).split('.')[0])
+            
         
 
         
