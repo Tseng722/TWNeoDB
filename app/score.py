@@ -138,13 +138,15 @@ def similarity(df,sample_name,output):
     df_mf.drop('nmer', axis=1, inplace=True)
     df_md = pd.merge(df_mf,df_d,how='outer',right_on='nmer',left_on='Peptide')
     df_md.drop('nmer', axis=1, inplace=True)
+    if 'IEDB_anno' not in df_md.columns:
+        df_md['IEDB_anno'] = ''
     
 
     return df_md
 
 def is_pep_in_db(job_uuid):
     file_path = os.path.join(OUT_FILE_DIR, str(job_uuid))
-    df = pd.read_csv(file_path+ f'/{job_uuid}.csv')
+    df = pd.read_csv(file_path+ f'/original_{job_uuid}.csv')
     df_in_db = pd.DataFrame()
     df_not_in_db = pd.DataFrame()
     db_pep = peptide_selection_score.objects.values_list('tumor_protein','hla_type')
