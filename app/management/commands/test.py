@@ -6,6 +6,7 @@ from django.db.models import Count
 from django.db import connection
 import pandas as pd
 from django_pandas.io import read_frame
+from datetime import datetime
 import plotly.graph_objects as go
 from plotly.offline import plot
 import plotly.express as px
@@ -22,7 +23,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # count_result = mtsa_rna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_rna_transcript_id').select_related('patient_transcript_score_r').filter(mtsa_rna_transcript_id__variant_frequency = 2 ).count()
         # count_result = mtsa_rna_transcript_mutant_mapping.objects.select_related('mutant_peptide_id').select_related('mtsa_rna_transcript_id').filter(mutant_peptide_id__peptide_selection_score_id = 38775 )
-        
+
         #-------------
         # tumor_protein = ''
         # hla_type = 'A'
@@ -39,7 +40,7 @@ class Command(BaseCommand):
 
         # rna_ids = mtsa_rna_transcript_mutant_mapping.objects.filter(mutant_peptide_id=49439).values_list('mtsa_rna_transcript_id', flat=True)
         # patientTranscriptScore = patient_transcript_score.objects.filter(rna_id__in=rna_ids)
-        
+
 
         # for item in patientTranscriptScore:
         #     print(item.rna_id.gene_id)
@@ -48,14 +49,14 @@ class Command(BaseCommand):
         # mutant_peptide_id = 49439
         # mutant_peptide_object = mutant_peptide.objects.get(id = mutant_peptide_id)
         # print(mutant_peptide_object.tumor_protein)
-        
-        
+
+
         #-------------
         # tumor_test = 'FPSSTTMPGV'
         # mutant_peptide_object = mutant_peptide.objects.get(tumor_protein = tumor_test,hla_type = 'HLA-A*02:03')
         # rna_ids_list = mtsa_rna_transcript_mutant_mapping.objects.filter(mutant_peptide_id__tumor_protein = tumor_test,mutant_peptide_id__hla_type = 'HLA-A*02:03').values_list('mtsa_rna_transcript_id', flat=True)
         # print(rna_ids_list)
-        
+
         # patient_transcript_score_object = patient_transcript_score.objects.filter(rna_id__in=rna_ids_list)
         # print(patient_transcript_score_object)
         # for i in patient_transcript_score_object:
@@ -67,8 +68,8 @@ class Command(BaseCommand):
         #             allele_tumor = 'A')
         # print(rna_id_instance)
         # patient_transcript_score_object = patient_transcript_score.objects.filter(rna_id = 55363)
-      
-        
+
+
         #-------------
 
         # count_result = mtsa_rna_transcript.objects.filter(variant_position ='chr10:103049719').count()
@@ -115,7 +116,7 @@ class Command(BaseCommand):
         # df = df.loc[df['class_type']=='A']
         # df = df.groupby(["hla_type"]).size().reset_index(name="counts")
 
-        
+
         # print(df)
         # =================
         # patient_info
@@ -137,7 +138,7 @@ class Command(BaseCommand):
         # # 打印 DataFrame
         # print(df)
         # ==============================
-        # user upload 
+        # user upload
         # db_pep = peptide_selection_score.objects.values_list('tumor_protein','hla_type')
         # df = pd.DataFrame(db_pep, columns=['Mutant', 'HLA Allele'])
         # df['twdb'] = df['Mutant']+'_'+df['HLA Allele']
@@ -201,14 +202,32 @@ class Command(BaseCommand):
         # print(df)
 
         # =========================   刪除table
-        # user_job.objects.all().delete()
-        user_job_ins = user_job.objects.filter(status='SUCCESS')
+        # user_info.objects.all().delete()
+        # =========================   speed
+        user_job_ins = user_job.objects.filter(status='SUCCESS').order_by('pep_count')
+        for i in user_job_ins:
+            print(i.pep_count,' ',int((i.end_time-i.start_time).total_seconds()))
         for i in user_job_ins:
             print(i.pep_count,str(i.end_time-i.start_time).split('.')[0])
-            
-        
 
+        # =========================   counting
+
+        # mtsa_counting = aetsa_transcript_mutant_mapping.objects.filter(tumor_type='liver').values('mutant_peptide_id').annotate(count=Count('id'))
+        # print(mtsa_counting.count())
+        # mtsa_counting = aetsa_transcript_mutant_mapping.objects.filter(tumor_type='colon').values('mutant_peptide_id').annotate(count=Count('id'))
+        # print(mtsa_counting.count())
+        # mtsa_counting = aetsa_transcript_mutant_mapping.objects.filter(tumor_type='oral').values('mutant_peptide_id').annotate(count=Count('id'))
+        # print(mtsa_counting.count())
+        # mtsa_counting = aetsa_transcript_mutant_mapping.objects.filter(tumor_type='lung').values('mutant_peptide_id').annotate(count=Count('id'))
+        # print(mtsa_counting.count())
+        # mtsa_counting = aetsa_transcript_mutant_mapping.objects.filter(tumor_type='breast').values('mutant_peptide_id').annotate(count=Count('id'))
+        # print(mtsa_counting.count())
         
+        # mtsa_counting = mtsa_counting.values('tumor_type').annotate(count=Count('id'))
+        # for i in mtsa_counting:
+        #     print(i)
+
+
 
         # 打印结果
         # print(tumor_type_counts)
