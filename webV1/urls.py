@@ -53,6 +53,7 @@ urlpatterns = [
 # =======test=========
     path('test', views.test,name='test'),
     path('test1', views.test1,name='test1'), 
+    path('test3', views.test3,name='test3'), 
     path('get_data/', views.get_data, name='get_data'),
     path('send_email',views.send_email,name = 'send_email') ,
     path('search/',views.listall,name='reference_guided'),

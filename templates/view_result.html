@@ -14,6 +14,7 @@
                             <th colspan="3">Annotation</th>
                             <th colspan="9">MHC related scores</th>
                             <th colspan="4">TCR related scores</th>
+                            <th colspan="1"style="background-color:#adb9ca;">Prioritize</th>
                         </tr>
                         <tr>
                             {% for column in df_final.columns %}
@@ -47,6 +48,7 @@
                                 <td>{{row.16}}</td>
                                 <td>{{row.17}}</td>
                                 <td>{{row.18}}</td>
+                                <td>{{row.19}}</td>
                                 
                                 <!-- {% for cell in row %}
                                     <td>{{cell}}</td>

@@ -10,6 +10,7 @@ import json
 from app.models import mtsa_dna_transcript,mtsa_rna_transcript,patient_info,peptide_selection_score,mutant_peptide,patient_transcript_score,mtsa_dna_transcript_mutant_mapping,mtsa_rna_transcript_mutant_mapping,hla_in_patient
 from app.models import aetsa_transcript_mutant_mapping,patient_aetsa_score,aetsa_transcript
 from app.models import shared_pep_mtsa_rna,shared_pep_mtsa_dna,shared_pep_aetsa
+from joblib import load
 
 
 OUT_FILE_DIR = settings.OUTPUT_BASE_DIR
@@ -72,26 +73,34 @@ def hydro_vector(pep):
 def calculate_hydro(peptide,hla,mer,df_weight):
 	f = (df_weight['HLA allele'] ==hla)
 	df_tmp = df_weight.loc[f].reset_index(drop=True)
+	if df_tmp.empty:
+		return 'NA','NA'
+    
+	hydro_final =[]
 	hydro_list = hydro_vector(peptide)
 	hydro_score_total = 0
 	try:
 		for i in range(mer): 
 			hydro_score_single = (-math.log(df_tmp.iat[0,i+1],10)*hydro_list[i])
+			hydro_final.append(hydro_score_single)
 			hydro_score_total += hydro_score_single
 		hydro_score_avg = hydro_score_total/mer
 	except:
-		hydro_score_avg = 'NA'
-	return hydro_score_avg
+		hydro_score_avg = 'NA','NA'
+	return hydro_score_avg,hydro_final
 
 def hydro(df):
     df_9_mer = pd.read_excel("/CMU_TSA/cindy2270/IEDB/score_TCR/abg2200_Data_file_S2.xlsx",sheet_name=0,index_col=None)
     df_8_mer = pd.read_excel("/CMU_TSA/cindy2270/IEDB/score_TCR/abg2200_Data_file_S2.xlsx",sheet_name=1,index_col=None)
     df_10_mer = pd.read_excel("/CMU_TSA/cindy2270/IEDB/score_TCR/abg2200_Data_file_S2.xlsx",sheet_name=2,index_col=None)
     df_11_mer = pd.read_excel("/CMU_TSA/cindy2270/IEDB/score_TCR/abg2200_Data_file_S2.xlsx",sheet_name=3,index_col=None)
+    df_hydro = pd.DataFrame()
     for i in range(len(df)):
         pep = df.at[i,'Peptide']
         hla = df.at[i,'HLA_Type']
         mer = df.at[i,'Length']
+        df_hydro.at[i,'Peptide'] = pep 
+        df_hydro.at[i,'HLA_Type'] = hla
         if mer == 8:
             df_weight = df_8_mer
         elif mer == 9:
@@ -100,10 +109,18 @@ def hydro(df):
             df_weight = df_10_mer
         elif mer == 11:
             df_weight = df_11_mer
-        hydro_score = calculate_hydro(pep,hla,mer,df_weight)
+        else:
+            continue
+        hydro_score, hydro_final= calculate_hydro(pep,hla,mer,df_weight)
         df.at[i,'hydro_score'] = hydro_score
+        df_hydro.at[i,'hydro_avg_score'] = hydro_score
+        if hydro_final=='NA':
+            continue
+        else:
+            for j in range(1,mer+1):
+                df_hydro.at[i,f'Position {j}'] = hydro_final[j-1]
 
-    return df
+    return df,df_hydro
 
 
 def similarity(df,sample_name,output):
@@ -261,4 +278,23 @@ def deepHLApan(df_in,job_uuid,output):
     df_dhp.drop(columns='HLA',inplace=True)
     
     return df_dhp
+
+def predictor(df):
+    chk_len = len(df)
+    feature_cols = ['Median IC50 Score', 'Median Percentile','Best Cleavage Position','foreignness_score','Best Cleavage Score',
+        'Predicted Stability','dissimilarity',
+       'Half Life', 'Stability Rank','hydro_avg_score', 'Position 1',
+       'Position 2', 'Position 3', 'Position 4', 'Position 5', 'Position 6',
+       'Position 7', 'Position 8','Position 9','Position 10','Position 11','binding score', 'BigMHC_IM','immunogenic score']
+    df = df.reindex(columns=feature_cols, fill_value=0)
+    df.fillna(0, inplace=True)
+    
+    loaded_model = load('/work1791/cindy2270/web/web_v1/webV1/static/model/best-089.joblib')
+    pred_pro = loaded_model.predict_proba(df)[:, 1]
+    if len(pred_pro) != chk_len:
+        return False
+    return pred_pro
+
+
+
     

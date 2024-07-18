@@ -49,6 +49,8 @@ import plotly.express as px
 
 from django_pandas.io import read_frame
 
+from app.score import predictor
+
 reader = geolite2.reader()
 OUT_FILE_DIR= settings.OUTPUT_BASE_DIR
 # Create your views here.
@@ -692,3 +694,8 @@ def test2(request):
     # print(task_result.result)
     
     return render(request,"test1.html",locals())
+
+def test3(request):
+    df = pd.read_csv('/work1791/cindy2270/web/web_v1/webV1/tmp/5b9c4345-a1af-53ee-84f6-fcc12b07965e/prd_final.csv')
+    df_prd_final = predictor(df)
+    return HttpResponse('success')
