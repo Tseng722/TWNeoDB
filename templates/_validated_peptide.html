@@ -4,7 +4,11 @@
     <th>Immunogenicity</th>
     </tr>
     <tr>
-    <td>{% if validated_peptide.tcr == 1 %}Positive{% elif validated_peptide.tcr == 0 %}Negative{% endif %}</td>
+    <td>
+        {% if validated_peptide.tcr == 1 %}Positive
+        {% elif validated_peptide.tcr == 0 %}Negative
+        {% else %} None
+        {% endif %}</td>
     </tr>
 </table>
 <table class="table text-center  table-borderless">
