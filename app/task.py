@@ -95,7 +95,7 @@ def all_score(job_uuid):
         df_final.rename(columns={'Median IC50 Score': 'IC50', 'Median Percentile': 'Percentile'}, inplace=True)
         
         df_final = df_final.rename(columns={'HLA_Type': 'HLA Type', 'IEDB_anno': 'Foreignness Anno','hydro_score':'Hydrophobicity','dissimilarity':'Dissimilarity','foreignness_score':'Foreignness Score','BigMHC_IM':'BigMHC IM','binding score':'Binding Score from DeepHLApan','immunogenic score':'DeepHLApan IM'})
-        df_final = df_final[['Peptide','HLA Type','Length','In TWNeoDB','IEDB Qualitative','Foreignness Anno','IC50','Percentile','Binding Score from DeepHLApan','Hydrophobicity','Predicted Stability','Half Life','Stability Rank','Best Cleavage Position','Best Cleavage Score','Dissimilarity','Foreignness Score','BigMHC IM','DeepHLApan IM','Porioritize Score']]
+        df_final = df_final[['Peptide','HLA Type','Length','In TWNeoDB','IEDB Qualitative','Foreignness Anno','IC50','Percentile','Binding Score from DeepHLApan','Predicted Stability','Half Life','Stability Rank','Best Cleavage Position','Best Cleavage Score','Hydrophobicity','Dissimilarity','Foreignness Score','BigMHC IM','DeepHLApan IM','Porioritize Score']]
         
         df_final.to_csv(file_path,index =False)
 

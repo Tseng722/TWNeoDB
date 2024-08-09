@@ -534,6 +534,7 @@ def view_result(request,job_uuid):
         if job_status=='SUCCESS':
             output = OUT_FILE_DIR + job_uuid
             df_final = pd.read_csv(output+'/final_score.csv')
+            df_final = df_final.sort_values(by='Porioritize Score', ascending=False)
             df_final = df_final.fillna('')
             # df_final = df_final[['Peptide','HLA Type','Length','In TWNeoDB','IEDB Qualitative','Foreignness Anno','IC50','Percentile','Hydrophobicity','Predicted Stability','Half Life','Stability Rank','Best Cleavage Position','Best Cleavage Score','Dissimilarity','Foreignness Score','BigMHC Immunogenicity Prediction']]
         elif job_status=='WAITTING':
