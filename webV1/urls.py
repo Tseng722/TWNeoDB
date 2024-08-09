@@ -26,6 +26,7 @@ urlpatterns = [
     path('search/mTSA/', views.search_database_mTSA,name='search_database_mTSA'),
     path('search/aeTSA/', views.search_database_aeTSA,name='search_database_aeTSA'),
     path('about', views.about,name='about'),
+    path('tutorial', views.tutorial,name='tutorial'),
 
     # path('database/mTSA/detail/<str:tnh>',views.detail_page_mtsa, name = 'detail_page_mtsa_url'),
     path('database/mTSA/RNA/detail/<int:id>',views.detail_page_mtsa, name = 'detail_page_mtsa'),
