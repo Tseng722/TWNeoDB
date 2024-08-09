@@ -133,6 +133,9 @@ def detail_page_mtsa_dna(request,id):
     normal = mutant_peptide_object.normal_protein
     hla = mutant_peptide_object.hla_type
     pos = mutant_peptide_object.pos
+    shared_pep_object = shared_pep_mtsa_dna.objects.select_related('mutant_peptide_id').filter(mutant_peptide_id__tumor_protein=tumor).values('tumor_type').annotate(tumor_type_patient=Count('patient_id', distinct=True))
+    total_tumor_object = patient_info.objects.values('tumor_type').annotate(tumor_total_patient=Count('id', distinct=True))
+    total_tumor_dict = {item['tumor_type']: item['tumor_total_patient'] for item in total_tumor_object}
     try :
         r = requests.get(f'https://query-api.iedb.org/mhc_search?linear_sequence=eq.{tumor}&select=linear_sequence%2Cstructure_type%2Csource_organism_name%2Celution_id%2Cmhc_restriction%2Cqualitative_measure%2Chost_organism_name%2Cmhc_allele_name')
         dict_obj = json.loads(r.text)
@@ -161,9 +164,11 @@ def detail_page_mtsa(request,id):
 
     transcript_object = mtsa_rna_transcript.objects.get(id = transcript_id)
     validated_peptide = mutant_peptide_object.peptide_selection_score_id.validated_peptide_id
-
     tumor = mutant_peptide_object.tumor_protein
     normal = mutant_peptide_object.normal_protein
+    shared_pep_object = shared_pep_mtsa_rna.objects.select_related('mutant_peptide_id').filter(mutant_peptide_id__tumor_protein=tumor).values('tumor_type').annotate(tumor_type_patient=Count('patient_id', distinct=True))
+    total_tumor_object = patient_info.objects.values('tumor_type').annotate(tumor_total_patient=Count('id', distinct=True))
+    total_tumor_dict = {item['tumor_type']: item['tumor_total_patient'] for item in total_tumor_object}
     hla = mutant_peptide_object.hla_type
     pos = mutant_peptide_object.pos
     # tumor = 'LYNTVATLY'
@@ -228,7 +233,9 @@ def detail_page_aetsa(request,id):
 
     tumor = mutant_peptide_object.tumor_protein
     hla = mutant_peptide_object.hla_type
-
+    shared_pep_object = shared_pep_aetsa.objects.select_related('mutant_peptide_id').filter(mutant_peptide_id__tumor_protein=tumor).values('tumor_type').annotate(tumor_type_patient=Count('patient_id', distinct=True))
+    total_tumor_object = patient_info.objects.values('tumor_type').annotate(tumor_total_patient=Count('id', distinct=True))
+    total_tumor_dict = {item['tumor_type']: item['tumor_total_patient'] for item in total_tumor_object}
     #iedb
     try :
         r = requests.get(f'https://query-api.iedb.org/mhc_search?linear_sequence=eq.{tumor}&select=linear_sequence%2Cstructure_type%2Csource_organism_name%2Celution_id%2Cmhc_restriction%2Cqualitative_measure%2Chost_organism_name%2Cmhc_allele_name')

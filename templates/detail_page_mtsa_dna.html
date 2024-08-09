@@ -21,21 +21,34 @@
         <h4>{{hla}}</h4>
     </div> 
     <div class=" col-md-4 text-left"  >
-      <h5>Source from : <span class="badge bg-dark">DNA</span></h5>
-      <h5>
-        Tumor type : 
-        {% for i in tumor_object %}
-          {% if i.tumor_type == 'colon' %}
-            <span class="badge bg-primary">{{i.tumor_type}}</span>
-          
-          {% elif i.tumor_type == 'oral' %}
-            <span class="badge bg-success">{{i.tumor_type}}</span>
-          {% elif i.tumor_type == 'lung' %}
-            <span class="badge bg-warning">{{i.tumor_type}}</span>
-          
-          {% endif %}
-        {% endfor %}
-      </h5>
+      <div class="row">
+        <div class="col-md-4"><h5>Source from: </h5></div>
+        <div class="col-md-8"><h5><span class="badge bg-dark">RNA</span></h5></div>
+      </div>
+      <div class="row">
+        <div class="col-md-4"><h5>Tumor type :</h5></div>
+        <div class="col-md-8">
+          <h5>
+            {% for i in shared_pep_object %}
+            {% if i.tumor_type == 'colon' %}
+              <span class="badge bg-primary">{{i.tumor_type}}</span> (Show in {{i.tumor_type_patient}}/{{total_tumor_dict.colon}} patient) <br>
+            {% endif %}
+            {% if i.tumor_type == 'oral' %}
+              <span class="badge bg-success">{{i.tumor_type}}</span>(Show in {{i.tumor_type_patient}}/{{total_tumor_dict.oral}} patient) <br>
+            {% endif %}
+            {% if i.tumor_type == 'lung' %}
+              <span class="badge bg-warning">{{i.tumor_type}}</span>(Show in {{i.tumor_type_patient}}/{{total_tumor_dict.lung}} patient) <br>
+            {% endif %}
+            {% if i.tumor_type == 'liver' %}
+              <span class="badge bg-info">{{i.tumor_type}}</span>(Show in {{i.tumor_type_patient}}/{{total_tumor_dict.liver}} patient) <br>
+            {% endif %}
+            {% if i.tumor_type == 'breast' %}
+              <span class="badge bg-danger">{{i.tumor_type}}</span>(Show in {{i.tumor_type_patient}}/{{total_tumor_dict.breast}} patient) <br>
+            {% endif %}
+          {% endfor %}
+          </h5>
+        </div>
+      </div>
       <h5>
         Associated Transcript :
         {% if associated_transcript_object %}
