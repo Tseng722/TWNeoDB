@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% block title %} Tutorial {% endblock %}
+{% block content %}
+<div class="col-md-12" style="padding-top: 100px;"></div>
+<div class="container-sm" style=" text-align: left; margin: auto;">
+    <h2>Tutorial</h2>
+</div>
+<div class="container-sm" style=" text-align: left; margin: auto;">
+  <div class="card text-dark bg-light" >
+    <div class="card-body">
+        <h5 class="card-title">Click the "Guide" button to see the usage of TWNeoDB</h5>
+        <div class="col-md-5" style="text-align: left;">
+            <a id="inputbut" class="btn btn-lg " href="#" target="_blank" role="button">Guide</a>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-sm" style=" text-align: left; margin: auto;">
+    <div class="card text-dark bg-light" >
+      <div class="card-body">
+          <h5 class="card-title">Demo video for TWNeoDB</h5>
+          <div class="col-md-5" style="text-align: left;">
+            <iframe width="520" height="280" src="https://www.youtube.com/embed/TiINj9nyuU8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          </div>
+      </div>
+    </div>
+</div>
+<div class="col-md-12" style="padding-top: 20px;"></div>
+<div class="container-sm" style=" text-align: left; margin: auto;">
+<div class="card text-dark mb-3" >
+    <div class="card-header"><strong>Name in TWNeoDB</strong></div>
+    <div class="card-body">
+      <table class="table  bg-light table-striped table-hover ">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>mTSA</td>
+          <td>Mutated tumor-specific antigens.</td>
+        </tr>
+        <tr>
+          <td>aeTSA</td>
+          <td>Aberrantly expressed tumor-specific antigens.</td>
+        </tr>
+        <tr>
+          <td>Gene Symbol</td>
+          <td>The Ensembl gene name of the affected gene</td>
+        </tr>
+        <tr>
+          <td>Varient frequency</td>
+          <td>The varient count amoung patients.</td>
+        </tr>
+        <tr>
+          <td>IC50</td>
+          <td>Median or lowest ic50 binding affinity of the best-binding mutant epitope across all prediction algorithms used.</td>
+        </tr>
+        <tr>
+          <td>Mut rank</td>
+          <td>Median or lowest binding affinity percentile rank of the best-binding mutant peptide across all prediction algorithms used (NetMHC or NetMHCpan).</td>
+        </tr>
+        <tr>
+          <td>Gene ID</td>
+          <td>The Ensembl ID of the affected gene.</td>
+        </tr>
+        <tr>
+          <td>Transcript ID</td>
+          <td>The Ensembl ID of the affected transcript.</td>
+        </tr>
+        <tr>
+          <td>Variant position</td>
+          <td>The chromosome and position of this variant.</td>
+        </tr>
+        <tr>
+          <td>Reference</td>
+          <td>The reference allele.</td>
+        </tr>
+        <tr>
+          <td>Variant</td>
+          <td>The alt allele.</td>
+        </tr>
+        <tr>
+          <td>Amino acids change</td>
+          <td>The amino acid change for the mutation.</td>
+        </tr>
+        <tr>
+          <td>Protein position</td>
+          <td>The protein position of the mutation.</td>
+        </tr>
+        <tr>
+          <td>Associated transcript peptide</td>
+          <td>Muntant peptides from the same transcript.</td>
+        </tr>
+        <tr>
+          <td>Tpm Normal</td>
+          <td>Transcripts per million in normal.</td>
+        </tr>
+        <tr>
+          <td>Tpm Tumor</td>
+          <td>Transcripts per million in tumor.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="col-md-12" style="padding-top: 20px;"></div>
+<div class="container-sm" style=" text-align: left; margin: auto;">
+<div class="card text-dark mb-3" >
+    <div class="card-header"><strong>Output File Columns</strong></div>
+    <div class="card-body">
+      <table class="table  bg-light table-striped table-hover ">
+        <thead>
+          <tr>
+            <th scope="col">Column Name</th>
+            <th scope="col">Description</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>Peptide</td>
+          <td>The input peptide from user.</td>
+        </tr>
+        <tr>
+          <td>HLA Type</td>
+          <td>The input HLA allele from user.</td>
+        </tr>
+        <tr>
+          <td>Length</td>
+          <td>The length of input peptide.</td>
+        </tr>
+        <tr>
+          <td>In TWNeoDB</td>
+          <td>Is the peptide included in TWNeoDB database or not.</td>
+        </tr>
+        <tr>
+          <td>IEDB Qualitative</td>
+          <td>Is the peptide included in IEDB database or not.</td>
+        </tr>
+        <tr>
+          <td>Foreignness Anno</td>
+          <td>The best alignment from the IEDB database queried for the sample if applicable.</td>
+        </tr>
+        <tr>
+          <td>IC50</td>
+          <td>Median or lowest ic50 binding affinity of the best-binding mutant epitope across all prediction algorithms used.</td>
+        </tr>
+        <tr>
+          <td>Percentile</td>
+          <td>Median or lowest binding affinity percentile rank of the best-binding mutant peptide across all prediction algorithms used (NetMHC or NetMHCpan).</td>
+        </tr>
+        <tr>
+          <td>Binding Score from DeepHLApan</td>
+          <td>The predicted binding affinity probability from DeepHLApan.</td>
+        </tr>
+        <tr>
+          <td>Predicted Stability</td>
+          <td>Stability of the peptide-MHC-I complex.</td>
+        </tr>
+        <tr>
+          <td>Half Life</td>
+          <td>Half-life of the peptide-MHC-I complex</td>
+        </tr>
+        <tr>
+          <td>Stability Rank</td>
+          <td>Stability of the peptide-MHC-I complex</td>
+        </tr>
+        <tr>
+          <td>Best Cleavage Position</td>
+          <td>Position of the highest predicted cleavage score</td>
+        </tr>
+        <tr>
+          <td>Best Cleavage Score</td>
+          <td>Highest predicted cleavage score</td>
+        </tr>
+        <tr>
+          <td>Hydrophobicity</td>
+          <td>The hydrophobicity between TCR and pMHC.</td>
+        </tr>
+        <tr>
+          <td>Dissimilarity</td>
+          <td>Value of 0 to 1 indicating alignment to the self-proteome, calculated in an analogous manner to neoanigen foreignness, with 1 indicating greater dissimilarity.</td>
+        </tr>
+        <tr>
+          <td>Foreignness Score</td>
+          <td>Neoantigen foreignness threshold. Value of 0 to 1 indicating the TCR recognition probability, calculated by summing alignments in IEDB immunogenic peptides,
+            with 1 indicating greater homology to immunogenic peptides.</td>
+        </tr>
+        <tr>
+          <td>BigMHC IM</td>
+          <td>The predicted immunogenicity probability from BigMHC.</td>
+        </tr>
+        <tr>
+          <td>DeepHLApan IM</td>
+          <td>The predicted immunogenicity probability from DeepHLApan.</td>
+        </tr>
+        <tr>
+          <td>Porioritize Score</td>
+          <td>The predicted immunogenicity prioritizing score featured with above indices.</td>
+        </tr>
+
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -89,6 +89,9 @@ def about(request):
     
     return render(request, "about.html",locals())
 
+def tutorial(request):
+    return render(request, "tutorial.html",locals())
+
 
 def sort(request , mode=None):
     if mode =='tumor_sort':
