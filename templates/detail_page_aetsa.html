@@ -44,7 +44,7 @@
         </div>
       </div>
       <h5>
-        Associated Transcript :
+        Potential TSA source :
         {% if associated_transcript_object %}
           <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#associated_transcriptModal">
             show
@@ -86,7 +86,7 @@
                 <th>Translated tumor peptide</th><td>{{ transcript_object.translated_tumor_peptide }}</td>
               </tr>
               <tr>
-                <th>Associated transcript peptide</th> 
+                <th>Other pMHC form same mutation</th> 
                   {% if associated_pep_object %}
                     <td>
                       <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#associated_peptideModal">
@@ -99,31 +99,31 @@
                 
               </tr>
               <tr>
-                <th>Tumor/Normal read count</th><td>{{ score_groupby.0.tumor_read_count_avg }} / {{score_groupby.0.normal_read_count_avg}}</td>
+                <th>Tumor/normal read count</th><td>{{ score_groupby.0.tumor_read_count_avg }} / {{score_groupby.0.normal_read_count_avg}}</td>
               </tr>
               <tr>
-                <th>sum of tumor and normal read count</th><td>{{ score_groupby.0.sum_of_tumor_and_normal_read_count_avg }}</td>
+                <th>Sum of tumor and normal read count</th><td>{{ score_groupby.0.sum_of_tumor_and_normal_read_count_avg }}</td>
               </tr>
               <tr>
-                <th>total tumor/normal read count</th><td>{{ score_groupby.0.total_tumor_read_count_avg }} / {{ score_groupby.0.total_normal_read_count_avg }}</td>
+                <th>Total tumor/normal read count</th><td>{{ score_groupby.0.total_tumor_read_count_avg }} / {{ score_groupby.0.total_normal_read_count_avg }}</td>
               </tr>
               <tr>
-                <th>sum of total tumor and normal read count</th><td>{{ score_groupby.0.sum_of_total_tumor_and_normal_read_count_avg }}</td>
+                <th>Sum of total tumor and normal read count</th><td>{{ score_groupby.0.sum_of_total_tumor_and_normal_read_count_avg }}</td>
               </tr>
               <tr>
-                <th>tumor/normal average read depth</th><td>{{ score_groupby.0.tumor_average_read_depth_avg }} / {{ score_groupby.0.normal_average_read_depth_avg }}</td>
+                <th>Tumor/normal average read depth</th><td>{{ score_groupby.0.tumor_average_read_depth_avg }} / {{ score_groupby.0.normal_average_read_depth_avg }}</td>
               </tr>
               <tr>
-                <th>sum of expected read count</th><td>{{ score_groupby.0.sum_of_expected_read_count_avg }}</td>
+                <th>Sum of expected read count</th><td>{{ score_groupby.0.sum_of_expected_read_count_avg }}</td>
               </tr>
               <tr>
-                <th>average depth ratio</th><td>{{ score_groupby.0.average_depth_ratio_avg }}</td>
+                <th>Average depth ratio</th><td>{{ score_groupby.0.average_depth_ratio_avg }}</td>
               </tr>
               <tr>
-                <th>element read proportion</th><td>{{ score_groupby.0.element_read_proportion_avg }}</td>
+                <th>Element read proportion</th><td>{{ score_groupby.0.element_read_proportion_avg }}</td>
               </tr>
               <tr>
-                <th>sum of element read count</th><td>{{ score_groupby.0.sum_of_element_read_count_avg }}</td>
+                <th>Sum of element read count</th><td>{{ score_groupby.0.sum_of_element_read_count_avg }}</td>
               </tr>
           </table>
         </div>

@@ -50,7 +50,7 @@
         </div>
       </div>
       <h5>
-        Associated Transcript :
+        Potential TSA source :
         {% if associated_transcript_object %}
           <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#associated_transcriptModal">
             show
@@ -100,7 +100,7 @@
                 <th>Variant Frequency</th><td>{{ transcript_object.variant_frequency }}</td>    
               </tr>
               <tr>
-                <th>Associated transcript peptide</th> 
+                <th>Other pMHC form same mutation</th> 
                   {% if associated_pep_object %}
                     <td>
                       <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#associated_peptideModal">
