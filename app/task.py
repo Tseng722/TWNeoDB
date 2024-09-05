@@ -17,6 +17,9 @@ from django.shortcuts import render, reverse
 
 from pandas.errors import EmptyDataError 
 
+import psutil
+import time
+
 # OUT_FILE_DIR= settings.OUTPUT_BASE_DIR
 BASE_DIR = settings.BASE_DIR
 OUT_FILE_DIR = os.path.join(BASE_DIR, 'tmp')
@@ -55,21 +58,25 @@ def all_score(job_uuid):
         is_pep_in_db(job_uuid)
         output = os.path.join(OUT_FILE_DIR, str(job_uuid))
         df = pd.read_csv(output+ f'/not_in_db_raw.csv')
-        df_p = pvac(df,output) #run pvac
-        df_p = df_p[['Epitope Seq','HLA Allele','Median IC50 Score','Median Percentile','cterm_7mer_gravy_score','max_7mer_gravy_score','Best Cleavage Position','Best Cleavage Score','Predicted Stability','Half Life','Stability Rank']]
-        # df_p.rename(columns={'Median IC50 Score': 'IC50', 'Median Percentile': 'Percentile'}, inplace=True)
-        df_h,prd_hydro = hydro(df) # hydro score
-        df_s = similarity(df,job_uuid,output) # similarity score
+        if len(df)!=0:
+            df_p = pvac(df,output) #run pvac
+            df_p = df_p[['Epitope Seq','HLA Allele','Median IC50 Score','Median Percentile','cterm_7mer_gravy_score','max_7mer_gravy_score','Best Cleavage Position','Best Cleavage Score','Predicted Stability','Half Life','Stability Rank']]
+            # df_p.rename(columns={'Median IC50 Score': 'IC50', 'Median Percentile': 'Percentile'}, inplace=True)
+            df_h,prd_hydro = hydro(df) # hydro score
+            df_s = similarity(df,job_uuid,output) # similarity score
 
-        df_final = df_h.merge(df_p,how='right',left_on=['Peptide','HLA_Type'],right_on = ['Epitope Seq','HLA Allele'], indicator=True)
-        df_final = df_final.round(3)
-        df_final.drop(columns=['Epitope Seq','HLA Allele','_merge'], inplace=True)
-        df_final = pd.merge(df_final,df_s,how='outer',right_on='Peptide',left_on='Peptide')
-        df_final.drop(columns=['Counts'], inplace=True)
-
+            df_final = df_h.merge(df_p,how='right',left_on=['Peptide','HLA_Type'],right_on = ['Epitope Seq','HLA Allele'], indicator=True)
+            df_final = df_final.round(3)
+            df_final.drop(columns=['Epitope Seq','HLA Allele','_merge'], inplace=True)
+            df_final = pd.merge(df_final,df_s,how='outer',right_on='Peptide',left_on='Peptide')
+            df_final.drop(columns=['Counts'], inplace=True)
+            df_final['In TWNeoDB'] = 'No'
+            df_final.rename(columns={'Median IC50 Score': 'IC50', 'Median Percentile': 'Percentile'}, inplace=True)
+        
+        else :
+            df_final = df
         df_in_db = pd.read_csv(output+ f'/in_db.csv')
         df_in_db['In TWNeoDB'] = 'Yes'
-        df_final['In TWNeoDB'] = 'No'
         df_final = pd.concat([df_final,df_in_db],axis = 0, ignore_index=True)
         df_final.drop(columns=['th'], inplace=True)
         # df_final = df_final[['Peptide','HLA_Type','In TWNeoDB','Length','IC50','Percentile','hydro_score','Predicted Stability','Half Life','Stability Rank','cterm_7mer_gravy_score','max_7mer_gravy_score','Best Cleavage Position','Best Cleavage Score','dissimilarity','foreignness_score','IEDB_anno']]
@@ -92,7 +99,6 @@ def all_score(job_uuid):
         df_prd.to_csv(output+'/prd_final.csv',index =False)
         pred_pro = predictor(df_prd)
         df_final['Porioritize Score'] = pred_pro
-        df_final.rename(columns={'Median IC50 Score': 'IC50', 'Median Percentile': 'Percentile'}, inplace=True)
         
         df_final = df_final.rename(columns={'HLA_Type': 'HLA Type', 'IEDB_anno': 'Foreignness Anno','hydro_score':'Hydrophobicity','dissimilarity':'Dissimilarity','foreignness_score':'Foreignness Score','BigMHC_IM':'BigMHC IM','binding score':'Binding Score from DeepHLApan','immunogenic score':'DeepHLApan IM'})
         df_final = df_final[['Peptide','HLA Type','Length','In TWNeoDB','IEDB Qualitative','Foreignness Anno','IC50','Percentile','Binding Score from DeepHLApan','Predicted Stability','Half Life','Stability Rank','Best Cleavage Position','Best Cleavage Score','Hydrophobicity','Dissimilarity','Foreignness Score','BigMHC IM','DeepHLApan IM','Porioritize Score']]
