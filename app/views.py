@@ -478,14 +478,20 @@ def upload(request):
     # print(country)
     mail = request.POST['email']
     mail_uuid = uuid.uuid5(uuid.NAMESPACE_DNS, mail)
-    try:
-        user_id = user_info.objects.get(mail=mail).id
-    except:
-        ip_info = get_location()
-        # print(ip_info['country'],ip_info['ip'])
-        ip_address = ip_info['ip']
-        country=reader.get(ip_address)['country']['names']['en']
-        # print(ip_address,country)
+    user_id_qs = user_info.objects.filter(mail=mail)
+    if user_id_qs.exists():
+        user_id = user_id_qs.first().id
+    # create user info
+    else:
+        try:
+            ip_info = get_location()
+            # print(ip_info['country'],ip_info['ip'])
+            ip_address = ip_info['ip']
+            country=reader.get(ip_address)['country']['names']['en']
+            # print(ip_address,country)
+        except:
+            ip_address = 'NA'
+            country = 'NA'
         user_info.objects.create(
                             ip=ip_address,mail=mail,
                             country=country,
@@ -523,6 +529,7 @@ def upload_result(request):
             delimiter = detect_delimiter(data_str)
             df = pd.read_csv(io.StringIO(data_str), sep=delimiter, header=None, names=['Peptide', 'HLA_Type'])
             df['Length'] = df['Peptide'].str.len()
+            df.to_csv(output+ f'/original_{job_uuid}.txt', sep='\t',index=False)
             df.to_csv(output+ f'/original_{job_uuid}.csv',index=False)
             pep_count = len(df)
             user_job.objects.create(
