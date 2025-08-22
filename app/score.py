@@ -8,7 +8,7 @@ from django.conf import settings
 import requests
 import json
 from app.models import mtsa_dna_transcript,mtsa_rna_transcript,patient_info,peptide_selection_score,mutant_peptide,patient_transcript_score,mtsa_dna_transcript_mutant_mapping,mtsa_rna_transcript_mutant_mapping,hla_in_patient
-from app.models import aetsa_transcript_mutant_mapping,patient_aetsa_score,aetsa_transcript
+from app.models import aetsa_transcript_mutant_mapping,patient_aetsa_score,aetsa_transcript,validated_peptide
 from app.models import shared_pep_mtsa_rna,shared_pep_mtsa_dna,shared_pep_aetsa
 from joblib import load
 
@@ -110,6 +110,8 @@ def hydro(df):
         elif mer == 11:
             df_weight = df_11_mer
         else:
+            df.at[i,'hydro_score'] = 0
+            df_hydro.at[i,'hydro_avg_score'] = 0
             continue
         hydro_score, hydro_final= calculate_hydro(pep,hla,mer,df_weight)
         df.at[i,'hydro_score'] = hydro_score
@@ -295,6 +297,15 @@ def predictor(df):
         return False
     return pred_pro
 
+def is_tcr_vlidated(df):
+    db_pep = validated_peptide.objects.filter(tcr__isnull=False).values_list('tumor_protein', 'hla_type','tcr')
+    df_tmp = pd.DataFrame(db_pep, columns=['Mutant', 'HLA Allele','tcr'])
+    tcr_dict = {f"{row['Mutant']}_{row['HLA Allele']}": row['tcr'] for _, row in df_tmp.iterrows()}
+    df['th'] = df['Peptide'] + '_' + df['HLA_Type']
+    df['TCR validated'] = df['th'].apply(lambda x: tcr_dict.get(x, ''))
+    df['TCR validated'] = df['TCR validated'].apply(lambda x: 'immunogenicity' if x == 1 else ('non-immunogenicity' if x == 0 else ''))
+    df.drop(columns='th', axis=1, inplace=True)
+    return df
 
 
     

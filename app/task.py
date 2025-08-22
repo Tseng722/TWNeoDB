@@ -3,7 +3,7 @@ from app.ip import get_location
 from os import path, makedirs, getcwd
 from django.conf import settings
 
-from app.score import pvac,hydro,similarity,is_pep_in_db,iedb_api,bigmhc,deepHLApan,predictor
+from app.score import pvac,hydro,similarity,is_pep_in_db,iedb_api,bigmhc,deepHLApan,predictor,is_tcr_vlidated
 
 from app.ip import get_location
 from django.http import HttpResponse
@@ -32,7 +32,7 @@ def is_path_exist(dir, error_msg=False):
         makedirs(dir)
         return True
 
-def send_email(uuid,status):
+def send_email(uuid,status,error=None):
     subject = 'TWNeoDB'
     if status=='SUCCESS':
         url = f'{web_url}/view_result/{uuid}'
@@ -40,7 +40,7 @@ def send_email(uuid,status):
         user_job_instance  = user_job.objects.select_related('user').get(uuid=uuid)
         recipient_list = [user_job_instance.user.mail]
     elif status=='FAILED':
-        message = f'Hello,\n\nYour task for the predicted data has failed. Please re-upload and check your file, or you can contact us via email.  \n\nBest wishes,\nTWNeoDB team'
+        message = f'Hello,\n\nYour task for the predicted data has failed. Please re-upload and check your file, or you can contact us via email.\nThe error message is: {error}  \n\nBest wishes,\nTWNeoDB team'
         user_job_instance  = user_job.objects.select_related('user').get(uuid=uuid)
         recipient_list = [user_job_instance.user.mail]
     elif status=='ACTIVATE_MAIL':
@@ -99,9 +99,10 @@ def all_score(job_uuid):
         df_prd.to_csv(output+'/prd_final.csv',index =False)
         pred_pro = predictor(df_prd)
         df_final['Porioritize Score'] = pred_pro
-        
+        print('----------------')
+        df_final = is_tcr_vlidated(df_final)
         df_final = df_final.rename(columns={'HLA_Type': 'HLA Type', 'IEDB_anno': 'Foreignness Anno','hydro_score':'Hydrophobicity','dissimilarity':'Dissimilarity','foreignness_score':'Foreignness Score','BigMHC_IM':'BigMHC IM','binding score':'Binding Score from DeepHLApan','immunogenic score':'DeepHLApan IM'})
-        df_final = df_final[['Peptide','HLA Type','Length','In TWNeoDB','IEDB Qualitative','Foreignness Anno','IC50','Percentile','Binding Score from DeepHLApan','Predicted Stability','Half Life','Stability Rank','Best Cleavage Position','Best Cleavage Score','Hydrophobicity','Dissimilarity','Foreignness Score','BigMHC IM','DeepHLApan IM','Porioritize Score']]
+        df_final = df_final[['Peptide','HLA Type','Length','In TWNeoDB','IEDB Qualitative','TCR validated','Foreignness Anno','IC50','Percentile','Binding Score from DeepHLApan','Predicted Stability','Half Life','Stability Rank','Best Cleavage Position','Best Cleavage Score','Hydrophobicity','Dissimilarity','Foreignness Score','BigMHC IM','DeepHLApan IM','Porioritize Score']]
         
         df_final.to_csv(file_path,index =False)
 
@@ -110,7 +111,7 @@ def all_score(job_uuid):
     except Exception as e:
         print(e)
         user_job.objects.filter(uuid=job_uuid).update(status="FAILED",end_time = timezone.now())
-        send_email(job_uuid,"FAILED")
+        send_email(job_uuid,"FAILED",e)
     return 0
 
 def test():
