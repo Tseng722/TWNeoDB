@@ -528,8 +528,8 @@ def upload_result(request):
             data_str = file_content.decode('utf-8')
             delimiter = detect_delimiter(data_str)
             df = pd.read_csv(io.StringIO(data_str), sep=delimiter, header=None, names=['Peptide', 'HLA_Type'])
-            df['Length'] = df['Peptide'].str.len()
             df.to_csv(output+ f'/original_{job_uuid}.txt', sep='\t',index=False)
+            df['Length'] = df['Peptide'].str.len()
             df.to_csv(output+ f'/original_{job_uuid}.csv',index=False)
             pep_count = len(df)
             user_job.objects.create(
