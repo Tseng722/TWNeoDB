@@ -5,4 +5,4 @@ app/management/commands/test.py
 webV1/__pycache__/
 webV1/settings/
 webV1/settings.py
-webV1/db.sqlite3
+db.sqlite3
